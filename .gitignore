@@ -1,0 +1,5 @@
+*.o
+generator_linux
+*.a
+*.out
+*.log
