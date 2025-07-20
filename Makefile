@@ -2,6 +2,7 @@ NAME		= lem_in
 SRC			= main.c\
 			parser.c\
 			table_2d.c\
+			multi_str.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra

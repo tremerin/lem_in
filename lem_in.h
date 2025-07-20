@@ -4,13 +4,6 @@
 # include "./Libft/libft.h"
 # include <stdio.h> //debug
 
-typedef struct s_table
-{
-    int     rows;
-    int     colums;
-    char    *array;
-}   t_table;
-
 typedef struct s_path
 {
     size_t          len;
@@ -18,13 +11,27 @@ typedef struct s_path
 	unsigned short	group; 
 }   t_path;
 
+typedef struct s_table
+{
+    int     rows;
+    int     colums;
+    char    *array;
+}   t_table;
+
+typedef struct s_multi_str
+{
+    char	*array;
+    size_t	count;
+    size_t	len_str;
+    size_t	max_str;
+}	t_multi_str;
+
 typedef struct s_data
 {
     unsigned short	ants;
     unsigned short	p_start;
     unsigned short	p_end;
-    char            *names;
-	size_t			name_len;
+    t_multi_str     *names;
 	t_table			*t_adjacency;
     size_t          table_size;
     t_path          *paths;
@@ -32,16 +39,21 @@ typedef struct s_data
 }   t_data;
 
 //parser
-void	file_parser(t_data *data);
-int		is_int(char *str);
-int		is_room(char *str);
-int		is_link(char *str);
+void	    file_parser(t_data *data);
+int		    is_int(char *str);
+int		    is_room(char *str);
+int		    is_link(char *str);
 
 //table_2d
-t_table *init_table(int rows, int colums, char value);
-void    set_value(t_table *table, int row, int colum, char value);
-char    get_value(t_table *table, int row, int colum);
-void    print_table(t_table *table);
-void    free_table(t_table *table);
+t_table     *init_table(int rows, int colums, char value);
+void        set_value(t_table *table, int row, int colum, char value);
+char        get_value(t_table *table, int row, int colum);
+void        print_table(t_table *table);
+void        free_table(t_table *table);
+
+//multi string
+t_multi_str *init_multi_str(size_t size, size_t len);
+void        add_str(t_multi_str *multi, char *str);
+void        free_multi_str(t_multi_str *multi);
 
 #endif

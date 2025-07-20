@@ -35,6 +35,11 @@ char    get_value(t_table *table, int row, int colum)
 
 void    print_table(t_table *table)
 {
+    if (table == NULL || table->rows == 0|| table->colums == 0)
+    {
+        printf("No data\n");
+        return;
+    }
     int i = 0;
     int size = table->rows * table->colums;
     while (i < size)

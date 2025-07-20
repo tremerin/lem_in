@@ -75,10 +75,66 @@ int     is_link(char *str)
 
 void    file_parser(t_data *data)
 {
+    int     start = 0;
+    int     end = 0;
+    size_t  i = 0;
+
     char    *str = get_next_line(0);
-    (void)data;
     while (str)
     {
+        //void line
+        if (ft_strlen(str) == 1)
+        {
+            printf("void line\n");
+            //try
+            break ;
+        }
+        //check start
+        if (ft_strncmp(str, "##start\n", 9) == 0)
+        {
+            if (start == 0)
+                start++;
+            else if (start > 1)
+            {
+                perror("Error: more than one entry");
+                free(str);
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (start == 1)
+        {
+            start++;
+            data->p_start = i;
+        }
+        //check end
+        if (ft_strncmp(str, "##end\n", 7) == 0)
+        {
+            if (end == 0)
+                end++;
+            else if (end > 1)
+            {
+                perror("Error: more than one exit");
+                free(str);
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (end == 1)
+        {
+            end++;
+            data->p_end = i;
+        }
+        //check room
+        if (is_room(str))
+        {
+            add_str(data->names, str);
+            i++;
+        }
+        //check link
+        else if (is_link(str))
+        {
+            if (data->t_adjacency == NULL)
+                init_table(i, i, 0);
+        }
         free(str);
         str = get_next_line(0);
     }

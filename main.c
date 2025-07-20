@@ -1,27 +1,32 @@
 #include "lem_in.h"
 
-void init_data(t_data *data, size_t name_len)
+void init_data(t_data *data)
 {
-    data->name_len = name_len;
-    data->names = malloc(sizeof(char) * data->name_len * 4000);
+
+    data->names = init_multi_str(4000, 5);
     if (!data->names)
     {
-        perror("Error: no memory");
+        perror("Error: malloc");
         exit(EXIT_FAILURE);
     }
-    ft_bzero(data->names, data->name_len *4000);
+    data->t_adjacency = NULL;
 }
 
 void free_data(t_data *data)
 {
-    free(data->names);
+    free_multi_str(data->names);
+    if (data->t_adjacency != NULL)
+        free_table(data->t_adjacency);
 }
 
 int main(void)
 {
     t_data data;
-    init_data(&data, 5);
+    init_data(&data);
+    printf("1\n");
     file_parser(&data);
+    printf("2\n");
+    print_table(data.t_adjacency);
     free_data(&data);
     return (0);
 }
