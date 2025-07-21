@@ -73,10 +73,61 @@ int     is_link(char *str)
     return (1);
 }
 
+char *get_name(char *room)
+{
+    char    *name;
+    size_t  i;
+    size_t  j;
+
+    i = 0;
+    j = 0;
+    while (room[i] != ' ')
+        i++;
+    name = malloc((i + 1) * sizeof(char));
+    while (j < i)
+    {
+        name[j] = room[j];
+        j++;
+    }
+    name[j] = 0;
+    return (name);
+}
+
+void    read_link(t_data *data, char *link)
+{
+    char    *node_one;
+    char    *node_two;
+    size_t  i = 0;
+    size_t  len = ft_strlen(link);
+    int     pos_name_one;
+    int     pos_name_two;
+
+    if (link[len -1] == '\n')
+        len--;
+    while (link[i])
+    {
+        if (link[i] == '-')
+        {
+            node_one = ft_substr(link, 0, i);
+            node_two = ft_substr(link, i + 1, len - (i+1));
+        }
+        i++;
+    }
+    //printf("one: %s$\ntwo: %s$\n", node_one, node_two);
+    pos_name_one = get_str_index(data->names, node_one);
+    pos_name_two = get_str_index(data->names, node_two);
+    //printf("one: %d, two: %d\n", pos_name_one, pos_name_two);
+    set_value(data->t_adjacency, pos_name_one, pos_name_two, 1);
+    set_value(data->t_adjacency, pos_name_two, pos_name_one, 1);
+    free(node_one);
+    free(node_two);
+}
+
 void    file_parser(t_data *data)
 {
     int     start = 0;
     int     end = 0;
+    char    *name;
     size_t  i = 0;
 
     char    *str = get_next_line(0);
@@ -126,14 +177,20 @@ void    file_parser(t_data *data)
         //check room
         if (is_room(str))
         {
-            add_str(data->names, str);
+            name = get_name(str);
+            add_str(data->names, name);
+            free(name);
             i++;
         }
         //check link
         else if (is_link(str))
         {
             if (data->t_adjacency == NULL)
-                init_table(i, i, 0);
+            {
+                data->t_adjacency = init_table(i, i, 0);
+                data->table_size = i;
+            }
+            read_link(data, str);
         }
         free(str);
         str = get_next_line(0);

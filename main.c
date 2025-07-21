@@ -26,7 +26,7 @@ int main(void)
     printf("1\n");
     file_parser(&data);
     printf("2\n");
-    print_table(data.t_adjacency);
+    //print_table(data.t_adjacency);
     free_data(&data);
     return (0);
 }
