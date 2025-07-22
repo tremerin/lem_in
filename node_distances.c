@@ -25,10 +25,8 @@ void    assign_distance(t_table *table, short int *distances, unsigned short p_i
     {
         checks = 0;
         i = 0;
-        printf("here 1\n");
         while (i < table->rows)
         {
-            printf("here 2\n");
             if (distances[i] != -1)
             {
                 j = 0;
@@ -41,11 +39,10 @@ void    assign_distance(t_table *table, short int *distances, unsigned short p_i
                         if (distances[j] > (short int)max_distance)
                             max_distance = distances[j];
                     }
+                    j++;
                 }
-                j++;
+                checks++;
             }
-            checks++;
-            printf("checks: %ld", checks);
             i++;
         }
     }
@@ -57,7 +54,8 @@ void    print_distances(t_data *data)
     size_t i = 0;
     while (i < data->table_size)
     {
-        printf("start dis[%ld]:%d", i, data->dist_start[i]);
-        printf("end dis[%ld]:%d", i, data->dist_end[i]);
+        printf("start dis[%ld]:%d\n", i, data->dist_start[i]);
+        printf("end   dis[%ld]:%d\n", i, data->dist_end[i]);
+        i++;
     }
 }
