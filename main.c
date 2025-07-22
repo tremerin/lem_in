@@ -23,10 +23,15 @@ int main(void)
 {
     t_data data;
     init_data(&data);
-    printf("1\n");
+    printf("init ok\n");
     file_parser(&data);
-    printf("2\n");
+    printf("parser ok\n");
     //print_table(data.t_adjacency);
+    init_distances(&data);
+    assign_distance(data.t_adjacency, data.dist_start, data.p_start, data.p_end);
+    assign_distance(data.t_adjacency, data.dist_end, data.p_end, data.p_start);
+    printf("distances ok\n");
+    print_distances(&data);
     free_data(&data);
     return (0);
 }

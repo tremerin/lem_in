@@ -4,6 +4,7 @@ SRC			= main.c\
 			table_2d.c\
 			multi_str.c\
 			pathfinder.c\
+			node_distances.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra

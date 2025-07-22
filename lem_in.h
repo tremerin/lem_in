@@ -13,8 +13,8 @@ typedef struct s_path
 
 typedef struct s_table
 {
-    int             rows;
-    int             colums;
+    unsigned int    rows;
+    unsigned int    colums;
     char            *array;
 }   t_table;
 
@@ -52,6 +52,11 @@ void        set_value(t_table *table, int row, int colum, char value);
 char        get_value(t_table *table, int row, int colum);
 void        print_table(t_table *table);
 void        free_table(t_table *table);
+
+//node_distance
+void        init_distances(t_data *data);
+void        assign_distance(t_table *table, short int *distances, unsigned short p_init, unsigned short p_end);
+void        print_distances(t_data *data);
 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);
