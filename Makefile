@@ -3,6 +3,7 @@ SRC			= main.c\
 			parser.c\
 			table_2d.c\
 			multi_str.c\
+			pathfinder.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra

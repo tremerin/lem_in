@@ -13,17 +13,17 @@ typedef struct s_path
 
 typedef struct s_table
 {
-    int     rows;
-    int     colums;
-    char    *array;
+    int             rows;
+    int             colums;
+    char            *array;
 }   t_table;
 
 typedef struct s_multi_str
 {
-    char	*array;
-    size_t	count;
-    size_t	len_str;
-    size_t	max_str;
+    char            *array;
+    size_t          count;
+    size_t          len_str;
+    size_t          max_str;
 }	t_multi_str;
 
 typedef struct s_data
@@ -34,8 +34,10 @@ typedef struct s_data
     t_multi_str     *names;
 	t_table			*t_adjacency;
     size_t          table_size;
+    short int       *dist_start;
+    short int       *dist_end;
+    size_t          n_paths;
     t_path          *paths;
-    unsigned short	n_paths; //max paths
 }   t_data;
 
 //parser

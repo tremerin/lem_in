@@ -3,3 +3,4 @@ generator_linux
 *.a
 *.out
 *.log
+test*
