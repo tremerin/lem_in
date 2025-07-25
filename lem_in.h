@@ -33,9 +33,11 @@ typedef struct s_data
     unsigned short	p_end;
     t_multi_str     *names;
 	t_table			*t_adjacency;
+    t_table         *t_weights;
     size_t          table_size;
     short int       *dist_start;
     short int       *dist_end;
+    short int       *multiplier;
     size_t          n_paths;
     t_path          *paths;
 }   t_data;
@@ -57,6 +59,9 @@ void        free_table(t_table *table);
 void        init_distances(t_data *data);
 void        assign_distance(t_table *table, short int *distances, unsigned short p_init, unsigned short p_end);
 void        print_distances(t_data *data);
+void        weight_table(t_data *data);
+void        assing_multiplier(t_data *data);
+void        print_multipliers(t_data data);
 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);

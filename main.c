@@ -10,13 +10,16 @@ void init_data(t_data *data)
         exit(EXIT_FAILURE);
     }
     data->t_adjacency = NULL;
+    data->t_weights = NULL;
 }
 
 void free_data(t_data *data)
 {
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
-        free_table(data->t_adjacency);
+        free_table(data->t_adjacency);    
+    if (data->t_weights != NULL)
+        free_table(data->t_weights);
 }
 
 int main(void)
@@ -31,7 +34,11 @@ int main(void)
     assign_distance(data.t_adjacency, data.dist_start, data.p_start, data.p_end);
     assign_distance(data.t_adjacency, data.dist_end, data.p_end, data.p_start);
     printf("distances ok\n");
-    print_distances(&data);
+    //print_distances(&data);
+    weight_table(&data);
+    //print_table(data.t_weights);
+    assing_multiplier(&data);
+    print_multipliers(data);
     free_data(&data);
     return (0);
 }

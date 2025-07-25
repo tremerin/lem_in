@@ -15,7 +15,6 @@ void    init_distances(t_data *data)
 
 void    assign_distance(t_table *table, short int *distances, unsigned short p_init, unsigned short p_end)
 {
-    printf("distances\n");
     distances[p_init] = 0;
     size_t  checks = 0;
     size_t  max_distance = 0;
@@ -57,5 +56,81 @@ void    print_distances(t_data *data)
         printf("start dis[%ld]:%d\n", i, data->dist_start[i]);
         printf("end   dis[%ld]:%d\n", i, data->dist_end[i]);
         i++;
+    }
+}
+
+void    weight_table(t_data *data)
+{
+    data->t_weights = init_table(data->table_size, data->table_size, 0);
+    size_t  i = 0;
+    size_t  j = 0;
+    while (i < data->table_size)
+    {
+        j = 0;
+        while (j < data->table_size)
+        {
+            if (get_value(data->t_adjacency, i, j) == 1)
+            {
+                if (data->dist_start[i] < data->dist_start[j] || data->dist_end[i] > data->dist_end[j])
+                    set_value(data->t_weights, i, j, 1);
+                else
+                    set_value(data->t_weights, i, j, 2);
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
+void print_multipliers(t_data data)
+{
+    size_t i = 0;
+    while (i < data.table_size)
+    {
+        printf("multiplier[%s]: %d\n", str_pos(data.names, i), data.multiplier[i]);
+        i++;
+    }
+}
+
+void    assing_multiplier(t_data *data) //testing old 
+{
+    size_t  max_weigth = 0;
+    size_t  deep = 1;
+    size_t  i = 0;
+    size_t  j = 0;
+    data->multiplier = malloc(sizeof(size_t) * data->table_size);
+    while (i < data->table_size)
+    {
+        data->multiplier[i] = 0;
+        if (data->dist_start[i] > (short int)max_weigth)
+            max_weigth = data->dist_start[i];
+        i++;
+    }
+    data->multiplier[data->p_start] = 1;
+    while (deep <= max_weigth)
+    {
+        i = 0;
+        while (i < data->table_size)
+        {
+            if (data->dist_start[i] == (short int)deep -1)
+            {
+                j = 0;
+                while (j < data->table_size) //busca hermanos
+                {
+                    if (get_value(data->t_weights, i, j) == 2)
+                        data->multiplier[i] += 1;
+                    j++;
+                }
+                j = 0;
+                while (j < data->table_size) //busca hijos
+                {
+                    if (get_value(data->t_weights, i, j) == 1)
+                        data->multiplier[j] += data->multiplier[i];
+                    j++;
+                }
+            }
+            i++;
+        }
+        deep++;
     }
 }
