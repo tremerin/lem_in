@@ -48,13 +48,6 @@ int		    is_int(char *str);
 int		    is_room(char *str);
 int		    is_link(char *str);
 
-//table_2d
-t_table     *init_table(int rows, int colums, char value);
-void        set_value(t_table *table, int row, int colum, char value);
-char        get_value(t_table *table, int row, int colum);
-void        print_table(t_table *table);
-void        free_table(t_table *table);
-
 //node_distance
 void        init_distances(t_data *data);
 void        assign_distance(t_table *table, short int *distances, unsigned short p_init, unsigned short p_end);
@@ -63,11 +56,24 @@ void        weight_table(t_data *data);
 void        assing_multiplier(t_data *data);
 void        print_multipliers(t_data data);
 
+//pathfinder
+void        number_of_paths(t_data *data);
+void        path_finding(t_data *data);
+void        print_paths(t_data *data, unsigned int paths);
+int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
+
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);
 void        add_str(t_multi_str *multi, char *str);
 char        *str_pos(t_multi_str *multi, size_t pos);
 size_t      get_str_index(t_multi_str *multi, char *str);
 void        free_multi_str(t_multi_str *multi);
+
+//table_2d
+t_table     *init_table(int rows, int colums, char value);
+void        set_value(t_table *table, int row, int colum, char value);
+char        get_value(t_table *table, int row, int colum);
+void        print_table(t_table *table);
+void        free_table(t_table *table);
 
 #endif

@@ -39,7 +39,6 @@ void    add_str(t_multi_str *multi, char *str)
 
 char    *str_pos(t_multi_str *multi, size_t pos)
 {
-    //return (multi->array[pos * multi->len_str]);
     return (char *)(multi->array + (pos * multi->len_str));
 }
 

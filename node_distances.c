@@ -82,7 +82,7 @@ void    weight_table(t_data *data)
     }
 }
 
-void print_multipliers(t_data data)
+void    print_multipliers(t_data data)
 {
     size_t i = 0;
     while (i < data.table_size)

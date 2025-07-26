@@ -38,7 +38,11 @@ int main(void)
     weight_table(&data);
     //print_table(data.t_weights);
     assing_multiplier(&data);
-    print_multipliers(data);
+    //print_multipliers(data);
+    printf("multipliers ok\n");
+    number_of_paths(&data);
+    printf("paths: %ld\n", data.n_paths);
+    path_finding(&data);
     free_data(&data);
     return (0);
 }
