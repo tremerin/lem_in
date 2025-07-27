@@ -78,26 +78,47 @@ void    number_of_paths(t_data *data)
     }
 }
 
-void print_paths(t_data *data, unsigned int paths)
+void    path_validation(t_data *data, unsigned int paths)
+{
+    size_t  i = 0;
+    while (i < paths)
+    {
+        if (data->paths[i].nodes[data->paths[i].len - 1] == data->p_end)
+            data->paths[i].valid = 1;
+        else
+            data->paths[i].valid = 0;
+        i++;
+    }
+}
+
+void    group_paths(t_data *data, unsigned int paths)
+{
+    unsigned short new_group = 0; 
+}
+
+void    print_paths(t_data *data, unsigned int paths)
 {
     size_t i = 0;
     while (i < paths)
     {
         size_t j = 0;
-        printf("Path[%lu] ", i);
-        while (j < data->paths[i].len)
+        if (data->paths[i].valid == 1)
         {
-            printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
-            j++;
+            printf("Path[%lu] ", i);
+            while (j < data->paths[i].len)
+            {
+                printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
+                j++;
+            }
+            printf("\n");
         }
-        printf("\n");
         i++;
     }
 }
 
 void path_finding(t_data *data)
 {
-    //init all_paths
+    //init paths
     data->paths[0].nodes[0] = data->p_start;
     data->paths[0].len = 1;
     //acutal number of paths
@@ -108,36 +129,19 @@ void path_finding(t_data *data)
     int incomplete = 1;
     while (incomplete)
     {
-        //print_paths(data, paths);
-        //printf("\n");
         size_t i = 0;
         incomplete = 0;
         while (i < paths)
         {
             pos = data->paths[i].nodes[data->paths[i].len -1];
-            //printf("i:%lu\n", i);
-            //printf("len: %lu\n", data->all_paths[i].len);
-            //printf("pos: %u\n", pos);
-            //printf("path: %u\n", paths);
-            //ha terminado en la salida
+            //termina en la salida
             if (pos == data->p_end)
             {
-                //printf("exit\n");
                 i++;
                 continue;
             }
             nexts = next_node(data, pos, i);
-            /*size_t n = 1;
-            printf("nexts path[%lu] ", i);
-            while (n <= nexts[0])
-            {
-                printf("%s ", data->names[nexts[n]]);
-                n++;
-            }
-            printf("\n");
-            */
-            //printf("nexts[0] path[%lu]: %u\n", i, nexts[0]);
-            //ha terminado sin salida
+            //termina sin salida
             if (nexts[0] == 0)
             {
                 //free(nexts);
@@ -162,7 +166,6 @@ void path_finding(t_data *data)
                     size_t cp = 0;
                     while (cp < data->paths[i].len)
                     {
-                        //printf("%i\n", paths);
                         data->paths[paths].nodes[cp] = data->paths[i].nodes[cp];
                         cp++;
                     }
@@ -175,5 +178,7 @@ void path_finding(t_data *data)
             i++;
         }
     }
+    path_validation(data, paths);
     print_paths(data, paths);
 }
+

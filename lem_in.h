@@ -8,7 +8,8 @@ typedef struct s_path
 {
     size_t          len;
     unsigned short	*nodes;
-	unsigned short	group; 
+	unsigned short	group;
+    unsigned short  valid; 
 }   t_path;
 
 typedef struct s_table
