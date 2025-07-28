@@ -81,18 +81,24 @@ void    number_of_paths(t_data *data)
 void    path_validation(t_data *data, unsigned int paths)
 {
     size_t  i = 0;
+    size_t  min_len = data->paths[0].len;
     data->valid_paths = 0;
     while (i < paths)
     {
         if (data->paths[i].nodes[data->paths[i].len - 1] == data->p_end)
         {
             data->paths[i].valid = 1;
+            //printf("%ld\n", data->paths[i].len);
             data->valid_paths++;
+            if (data->paths[i].len < min_len)
+                min_len = data->paths[i].len;
         }
         else
             data->paths[i].valid = 0;
         i++;
     }
+    printf("valid paths: %ld\n", data->valid_paths);
+    //printf("min_len: %ld\n", min_len);
 }
 
 void    print_paths(t_data *data, unsigned int paths)
@@ -178,6 +184,6 @@ void path_finding(t_data *data)
         }
     }
     path_validation(data, paths);
-    print_paths(data, paths);
+    //print_paths(data, paths);
 }
 
