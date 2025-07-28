@@ -8,7 +8,6 @@ typedef struct s_path
 {
     size_t          len;
     unsigned short	*nodes;
-	unsigned short	group;
     unsigned short  valid; 
 }   t_path;
 
@@ -39,8 +38,10 @@ typedef struct s_data
     short int       *dist_start;
     short int       *dist_end;
     short int       *multiplier;
+    size_t          valid_paths;
     size_t          n_paths;
     t_path          *paths;
+    unsigned short  **groups;
 }   t_data;
 
 //parser
@@ -62,6 +63,9 @@ void        number_of_paths(t_data *data);
 void        path_finding(t_data *data);
 void        print_paths(t_data *data, unsigned int paths);
 int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
+
+//group paths
+void        group_paths(t_data *data, unsigned int paths);
 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);

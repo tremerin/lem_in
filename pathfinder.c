@@ -81,19 +81,18 @@ void    number_of_paths(t_data *data)
 void    path_validation(t_data *data, unsigned int paths)
 {
     size_t  i = 0;
+    data->valid_paths = 0;
     while (i < paths)
     {
         if (data->paths[i].nodes[data->paths[i].len - 1] == data->p_end)
+        {
             data->paths[i].valid = 1;
+            data->valid_paths++;
+        }
         else
             data->paths[i].valid = 0;
         i++;
     }
-}
-
-void    group_paths(t_data *data, unsigned int paths)
-{
-    unsigned short new_group = 0; 
 }
 
 void    print_paths(t_data *data, unsigned int paths)
