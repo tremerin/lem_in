@@ -71,10 +71,10 @@ void    weight_table(t_data *data)
         {
             if (get_value(data->t_adjacency, i, j) == 1)
             {
-                if (data->dist_start[i] < data->dist_start[j] || data->dist_end[i] > data->dist_end[j])
+                if (data->dist_start[i] <= data->dist_start[j] || data->dist_end[i] > data->dist_end[j])
                     set_value(data->t_weights, i, j, 1);
-                else
-                    set_value(data->t_weights, i, j, 2);
+                //else
+                //    set_value(data->t_weights, i, j, 2);
             }
             j++;
         }

@@ -82,13 +82,15 @@ void    path_validation(t_data *data, unsigned int paths)
 {
     size_t  i = 0;
     size_t  min_len = data->paths[0].len;
+    size_t  average_len = 0;
     data->valid_paths = 0;
     while (i < paths)
     {
         if (data->paths[i].nodes[data->paths[i].len - 1] == data->p_end)
         {
             data->paths[i].valid = 1;
-            //printf("%ld\n", data->paths[i].len);
+            //printf("%ld\n", data->paths[i].len); //print path len
+            average_len += data->paths[i].len;
             data->valid_paths++;
             if (data->paths[i].len < min_len)
                 min_len = data->paths[i].len;
@@ -97,7 +99,8 @@ void    path_validation(t_data *data, unsigned int paths)
             data->paths[i].valid = 0;
         i++;
     }
-    printf("valid paths: %ld\n", data->valid_paths);
+    printf("valid paths: %ld/%d\n", data->valid_paths, paths);
+    printf("average len: %ld", average_len / data->valid_paths);
     //printf("min_len: %ld\n", min_len);
 }
 
