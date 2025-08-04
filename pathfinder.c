@@ -34,6 +34,21 @@ unsigned int *next_node(t_data * data, int pos, size_t path)
     return (nodes);
 }
 
+void    next_node_2(t_data *data, int pos, size_t path, size_t *len, unsigned int *nexts)
+{
+    unsigned int    i = 0;
+    *len = 0;
+    while (i < data->table_size)
+    {
+        if (get_value(data->t_weights, pos, i) > 0 &&
+            !contain_pos(data->paths[path].nodes, i, data->paths[path].len))
+        {
+            nexts[*len] = i; 
+            *len += 1;
+        }   
+        i++;
+    }
+}
 
 int contain_pos(unsigned short *positions, unsigned int pos, size_t len)
 {

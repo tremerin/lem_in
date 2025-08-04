@@ -64,22 +64,31 @@ void    weight_table(t_data *data)
     data->t_weights = init_table(data->table_size, data->table_size, 0);
     size_t  i = 0;
     size_t  j = 0;
+    size_t  forks = 0;
+    data->max_forks = 0;
     while (i < data->table_size)
     {
         j = 0;
+        forks = 0;
         while (j < data->table_size)
         {
             if (get_value(data->t_adjacency, i, j) == 1)
             {
                 if (data->dist_start[i] <= data->dist_start[j] || data->dist_end[i] > data->dist_end[j])
+                {
                     set_value(data->t_weights, i, j, 1);
+                    forks++;
+                }
                 //else
                 //    set_value(data->t_weights, i, j, 2);
             }
             j++;
         }
         i++;
+        if (forks > data->max_forks)
+            data->max_forks = forks;
     }
+    printf("max forks: %ld\n", data->max_forks);
 }
 
 void    print_multipliers(t_data data)

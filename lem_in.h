@@ -35,6 +35,7 @@ typedef struct s_data
 	t_table			*t_adjacency;
     t_table         *t_weights;
     size_t          table_size;
+    size_t          max_forks;
     short int       *dist_start;
     short int       *dist_end;
     short int       *multiplier;
