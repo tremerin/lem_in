@@ -42,7 +42,8 @@ int main(void)
     printf("multipliers ok\n");
     number_of_paths(&data);
     printf("paths: %ld\n", data.n_paths);
-    path_finding(&data);
+    //path_finding(&data);
+    path_finding2(&data);
     free_data(&data);
     return (0);
 }
