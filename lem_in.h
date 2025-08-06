@@ -62,7 +62,6 @@ void        print_multipliers(t_data data);
 //pathfinder
 void        number_of_paths(t_data *data);
 void        path_finding(t_data *data);
-void        path_finding2(t_data *data);
 void        print_paths(t_data *data, unsigned int paths);
 int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
 
