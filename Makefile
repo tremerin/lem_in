@@ -6,6 +6,7 @@ SRC			= main.c\
 			pathfinder.c\
 			node_distances.c\
 			group_paths.c\
+			ants_movement.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra

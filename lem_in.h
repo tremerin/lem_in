@@ -68,6 +68,9 @@ int         contain_pos(unsigned short *positions, unsigned int pos, size_t len)
 //group paths
 void        group_paths(t_data *data, unsigned int paths);
 
+//ants movement
+size_t      num_lines(unsigned short ants, size_t *paths_len, size_t n_paths);
+
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);
 void        add_str(t_multi_str *multi, char *str);
