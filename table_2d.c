@@ -1,12 +1,12 @@
 #include "lem_in.h"
 
 
-t_table *init_table(int rows, int colums, char value)
+t_table *init_table(int rows, int columns, char value)
 {
     t_table *new = malloc(sizeof(t_table));
     new->rows = rows;
-    new->colums = colums;
-    int size = rows * colums;
+    new->columns = columns;
+    int size = rows * columns;
     new->array = malloc(sizeof(char) * size);
     if (!new->array)
     {
@@ -25,28 +25,28 @@ t_table *init_table(int rows, int colums, char value)
 
 void    set_value(t_table *table, int row, int colum, char value)
 {
-    table->array[(table->colums * row) + colum] = value;
+    table->array[(table->columns * row) + colum] = value;
 }
 
 char    get_value(t_table *table, int row, int colum)
 {
-    return (table->array[(table->colums * row) + colum]);
+    return (table->array[(table->columns * row) + colum]);
 }
 
 void    print_table(t_table *table)
 {
-    if (table == NULL || table->rows == 0|| table->colums == 0)
+    if (table == NULL || table->rows == 0|| table->columns == 0)
     {
         printf("No data\n");
         return;
     }
     int i = 0;
-    int size = table->rows * table->colums;
+    int size = table->rows * table->columns;
     while (i < size)
     {
         printf("%3d",table->array[i]);
         i++;
-        if (i > 0 && i % table->colums == 0)
+        if (i > 0 && i % table->columns == 0)
             printf("\n");
     }
 }
@@ -55,4 +55,18 @@ void    free_table(t_table *table)
 {
     free(table->array);
     free(table);
+}
+
+t_table *copy_table(t_table *copy)
+{
+    t_table *paste = init_table(copy->columns, copy->rows, 0);
+
+    int size = copy->columns * copy->rows;
+    int i = 0;
+    while (i < size)
+    {
+        paste->array[i] = copy->array[i];
+        i++;
+    }
+    return paste;
 }

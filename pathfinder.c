@@ -176,3 +176,65 @@ void path_finding(t_data *data)
     path_validation(data, paths);
     //print_paths(data, paths);
 }
+
+#include <limits.h>
+
+
+int bfs(t_table *flow)
+{
+    return 1;
+}
+
+int ford_fulkerson(t_data *data)
+{
+    t_table *flow = init_table(data->t_adjacency->columns, data->t_adjacency->rows, 0);
+    t_table *residual = copy_table(data->t_adjacency);
+
+    unsigned short *parent = malloc(sizeof(unsigned short) * data->table_size); //padres de cada nodo
+    int max_flow = 0; //numero de hormigas que pueden pasar en un turno
+
+    while (bfs(flow))
+    {
+        int path_flow = INT_MAX;
+        
+        //capacidad mínima del camino, cuantas hormigas pueden pasar a la vez
+        for (unsigned short v = data->p_end; v != data->p_start; v = parent[v])
+        {
+            unsigned short u = parent[v];
+            int r_capacity = get_value(residual, u, v);
+            if (r_capacity < path_flow)
+            {
+                path_flow = r_capacity;
+            }
+        }
+
+        //actualizar los flujos directos y reversos
+        for (unsigned short v = data->p_end; v != data->p_start; v = parent[v])
+        {
+            unsigned short u = parent[v];
+            char current = get_value(flow, u, v);
+            (void)current;
+            //pasar current a int
+            //set_value(flow, u, v, current + path_flow)
+            set_value(flow, u, v, 1);
+
+            char reverse = get_value(flow, v, u);
+            (void)reverse;
+            //pasar reverse a int
+            //set_value(flow, v, u, current + path_flow)
+            set_value(flow, v, u, -1);
+        }
+
+        max_flow += path_flow;
+        //update residual
+        int size = residual->columns * residual->rows;
+        int i = 0;
+        while (i < size)
+        {
+            char t_adj_val = data->t_adjacency->array[i];
+            char flow_val = flow->array[i];
+            char res_val = t_adj_val - flow_val;
+            //set value como lo hago sin row ni column???
+        }
+    }
+}

@@ -14,7 +14,7 @@ typedef struct s_path
 typedef struct s_table
 {
     unsigned int    rows;
-    unsigned int    colums;
+    unsigned int    columns;
     char            *array;
 }   t_table;
 
@@ -29,8 +29,8 @@ typedef struct s_multi_str
 typedef struct s_data
 {
     unsigned short	ants;
-    unsigned short	p_start;
-    unsigned short	p_end;
+    unsigned short	p_start; //indice start
+    unsigned short	p_end; //indice end
     t_multi_str     *names;
 	t_table			*t_adjacency;
     t_table         *t_weights;
@@ -79,7 +79,7 @@ size_t      get_str_index(t_multi_str *multi, char *str);
 void        free_multi_str(t_multi_str *multi);
 
 //table_2d
-t_table     *init_table(int rows, int colums, char value);
+t_table     *init_table(int rows, int columns, char value);
 void        set_value(t_table *table, int row, int colum, char value);
 char        get_value(t_table *table, int row, int colum);
 void        print_table(t_table *table);

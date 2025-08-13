@@ -20,7 +20,7 @@ void    assign_distance(t_table *table, short int *distances, unsigned short p_i
     size_t  max_distance = 0;
     size_t  i = 0;
     size_t  j = 0;
-    while (checks < table->colums)
+    while (checks < table->columns)
     {
         checks = 0;
         i = 0;
@@ -29,7 +29,7 @@ void    assign_distance(t_table *table, short int *distances, unsigned short p_i
             if (distances[i] != -1)
             {
                 j = 0;
-                while (j < table->colums)
+                while (j < table->columns)
                 {
                     if (get_value(table, i, j) == 1 && 
                         (distances[i] < distances[j] || distances[j] == -1))
