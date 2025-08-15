@@ -36,74 +36,92 @@ size_t num_lines(unsigned short ants, size_t *paths_len, size_t n_paths)
 
 unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_paths)
 {
-    unsigned short  *assigned = malloc(sizeof(unsigned short *) * n_paths);
+    unsigned short *assigned = malloc(sizeof(unsigned short) * n_paths);
+    size_t lines = 0;
     if (n_paths == 1)
     {
         assigned[0] = ants;
-        return(assigned);
+        return (assigned);
     }
     //ordenar paths len de menor a mayor
     size_t i = 0;
-    size_t j = 0;
     size_t dif_paths = 0;
     size_t open_paths = 1;
     unsigned short total_ants = ants - 1;
-    assigned[0] = 1;
-
+    lines = paths_len[0];
+    size_t actual_len = paths_len[0];
     while (i < n_paths - 1 && total_ants > 0)
     {
-        dif_paths = paths_len[i + 1] - paths_len[i];
-        j = 0;
-        if (total_ants - ((dif_paths * i ) + paths_len[i]) < 0)
-            break ;
-        assigned[i] += paths_len[i];
-        total_ants -= paths_len[i];
-        while (j <= i)
+        dif_paths = paths_len[i + 1] - actual_len;
+        lines += dif_paths;
+        if (total_ants > dif_paths)
         {
-            total_ants -= dif_paths;
-            assigned[j] += dif_paths;
-            j++;
-        }
-        if (total_ants > (dif_paths * i))
-        {
-            assigned[i + 1] = 1;
-            total_ants -= 1;
+            actual_len = paths_len[i + 1];
+            total_ants -= (dif_paths * open_paths) + 1;
             open_paths++;
         }
-        else
-            break ;
         i++;
     }
     //repatir resto de hormigas
-    if (total_ants > 0)
+    lines += total_ants / open_paths;
+    size_t modulo = total_ants % open_paths;
+    //hormigas por camino
+    i = 0;
+    while (i < open_paths)
     {
-        unsigned short rest = total_ants / open_paths;
-        i = 0;
-        while (i < open_paths)
+        assigned[i] = lines - (paths_len[i] - 1);
+        if (modulo > 0)
         {
-            assigned[i] += rest;
-            i++;
+            assigned[i] += 1;
+            modulo--;
         }
-        if (total_ants % open_paths != 0)
-            assigned[0] += 1;
+        i++;
     }
-
-
     return (assigned);
 }
 
-int main(void)
+int	ft_atoi(const char *str)
 {
-    unsigned short ants = 100;
-    size_t n_paths = 3;
-    size_t *lens = malloc(sizeof(size_t) * n_paths);
-    lens[0] = 5;
-    lens[1] = 20;
-    lens[2] = 50;
+	int	i;
+	int	num;
+	int	sig;
+
+	i = 0;
+	num = 0;
+	sig = 1;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
+		|| str[i] == '\n' || str[i] == '\r' || str[i] == '\f')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sig = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num = (num * 10) + str[i] - '0';
+		i++;
+	}
+	return (num * sig);
+}
+
+int main(int argc, char** argv)
+{
+    size_t *lens = malloc(sizeof(size_t) * argc);
+    size_t ants = ft_atoi(argv[1]);
+    size_t i = 0;
+    size_t n_paths = argc - 2;
+    while (i < n_paths)
+    {
+        lens[i] = ft_atoi(argv[i+ 2]);
+        //printf("len[%ld]%ld\n", i, lens[i + 2]);
+        i++;
+    }
     size_t lines = num_lines(ants, lens, n_paths);
     printf("lines: %ld\n", lines);
     unsigned short *paths = assign_ants(ants, lens, n_paths);
-    size_t i = 0;
+    i = 0;
     while (i < n_paths)
     {
         printf("path[%ld] %d\n", i, paths[i]);
