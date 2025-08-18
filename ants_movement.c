@@ -18,9 +18,9 @@ size_t num_lines(unsigned short ants, size_t *paths_len, size_t n_paths)
     while (i < n_paths - 1 && total_ants > 0)
     {
         dif_paths = paths_len[i + 1] - actual_len;
-        lines += dif_paths;
-        if (total_ants > dif_paths)
+        if (total_ants > dif_paths * open_paths)
         {
+            lines += dif_paths;
             actual_len = paths_len[i + 1];
             total_ants -= (dif_paths * open_paths) + 1;
             open_paths++;
@@ -53,9 +53,9 @@ unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_pat
     while (i < n_paths - 1 && total_ants > 0)
     {
         dif_paths = paths_len[i + 1] - actual_len;
-        lines += dif_paths;
-        if (total_ants > dif_paths)
+        if (total_ants > dif_paths * open_paths)
         {
+            lines += dif_paths;
             actual_len = paths_len[i + 1];
             total_ants -= (dif_paths * open_paths) + 1;
             open_paths++;
