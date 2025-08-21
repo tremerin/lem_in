@@ -66,6 +66,7 @@ void        print_paths(t_data *data, unsigned int paths);
 int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
 
 //group paths
+int         compatible_paths(t_path *path_one, t_path *path_two);
 void        group_paths(t_data *data, unsigned int paths);
 
 //ants movement
