@@ -80,6 +80,50 @@ unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_pat
     return (assigned);
 }
 
+unsigned short  first_ant(size_t path, unsigned short *ants)
+{
+    unsigned short first = 0;
+    size_t  i = 0;
+    while (i < path)
+    {
+        first += ants[i];
+        i++;
+    }
+    return (0);
+}
+
+void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
+{
+    size_t lines = num_lines(data->ants, paths_len, n_paths);
+    unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
+    size_t steps = 0;
+    size_t path = 0;
+    size_t ants = 0;
+    unsigned short ant_num = 0;
+    unsigned short ants = 0;
+    while (steps < lines)
+    {
+        path = 0;
+        while (path < n_paths)
+        {
+            ants = 0;
+            ant_num = first_ant(path, assigned_ants);
+            while (ants < assigned_ants[path])
+            {
+                if ((steps) < paths_len[path] && (steps) >= 0)
+                {
+                    printf("L%d-%s ", ant_num + ants, str_pos(data->names, (steps - ants)));//posicion del camino, ordenar los caminos primero
+                }
+                ants++;
+            }
+            path++;
+        }
+        printf("\n");
+        steps++;
+    }
+    free(assigned_ants);
+}
+
 int	ft_atoi(const char *str)
 {
 	int	i;
