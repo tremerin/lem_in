@@ -174,5 +174,5 @@ void path_finding(t_data *data)
     }
     free(nexts);
     path_validation(data, paths);
-    //print_paths(data, paths);
+    print_paths(data, paths);
 }
