@@ -2,7 +2,7 @@
     #define LEM_IN_H
 
 # include "./Libft/libft.h"
-# include <stdio.h> //debug
+# include <stdio.h>
 
 typedef struct s_path
 {
@@ -43,6 +43,10 @@ typedef struct s_data
     size_t          n_paths;
     t_path          *paths;
     unsigned short  **groups;
+
+    //save index and number of selected paths
+    size_t          *paths_index;
+    size_t          n_selected_paths;
 }   t_data;
 
 //parser
@@ -71,6 +75,7 @@ void        group_paths(t_data *data, unsigned int paths);
 
 //ants movement
 size_t      num_lines(unsigned short ants, size_t *paths_len, size_t n_paths);
+void        moving_ants(t_data *data, size_t *paths_len, size_t n_paths);
 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);

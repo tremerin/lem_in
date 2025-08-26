@@ -100,7 +100,6 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
     size_t path = 0;
     size_t ants = 0;
     unsigned short ant_num = 0;
-    unsigned short ants = 0;
     while (steps < lines)
     {
         path = 0;
@@ -110,9 +109,10 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
             ant_num = first_ant(path, assigned_ants);
             while (ants < assigned_ants[path])
             {
-                if ((steps) < paths_len[path] && (steps) >= 0)
+                if (steps < paths_len[path] && (int)steps - (int)ants >= 0)
                 {
-                    printf("L%d-%s ", ant_num + ants, str_pos(data->names, (steps - ants)));//posicion del camino, ordenar los caminos primero
+                    printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
+                        data->paths[data->paths_index[path]].nodes[steps - ants]));
                 }
                 ants++;
             }
@@ -124,7 +124,7 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
     free(assigned_ants);
 }
 
-int	ft_atoi(const char *str)
+/* int	ft_atoi(const char *str)
 {
 	int	i;
 	int	num;
@@ -172,4 +172,4 @@ int main(int argc, char** argv)
         i++;
     }
     return (0);
-}
+} */
