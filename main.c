@@ -40,9 +40,10 @@ int main(void)
     assing_multiplier(&data);
     //print_multipliers(data);
     printf("multipliers ok\n");
-    number_of_paths(&data);
-    printf("paths: %ld\n", data.n_paths);
-    path_finding(&data);
-    free_data(&data);
+    // number_of_paths(&data);
+    // printf("paths: %ld\n", data.n_paths);
+    // path_finding(&data);
+    // free_data(&data);
+    find_paths(&data);
     return (0);
 }

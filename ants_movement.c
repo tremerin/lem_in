@@ -34,14 +34,14 @@ size_t num_lines(unsigned short ants, size_t *paths_len, size_t n_paths)
     return (lines);
 }
 
-int main(void)
-{
-    unsigned short ants = 100;
-    size_t *lens = malloc(sizeof(size_t) * 3);
-    lens[0] = 20;
-    lens[1] = 20;
-    lens[2] = 30;
-    size_t lines = num_lines(ants, lens, 3);
-    printf("lines: %ld\n", lines);
-    return (0);
-}
+// int main(void)
+// {
+//     unsigned short ants = 100;
+//     size_t *lens = malloc(sizeof(size_t) * 3);
+//     lens[0] = 20;
+//     lens[1] = 20;
+//     lens[2] = 30;
+//     size_t lines = num_lines(ants, lens, 3);
+//     printf("lines: %ld\n", lines);
+//     return (0);
+// }
