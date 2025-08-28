@@ -106,6 +106,28 @@ void    print_paths(t_data *data, unsigned int paths)
     }
 }
 
+void order_paths(t_data *data)
+{
+    size_t i = 0;
+    size_t j = 0;
+    size_t minor = 0;
+    size_t index = 0; 
+    while (i < data->n_paths)
+    {
+        minor = data->paths[i].len;
+        j = i;
+        while (j < data->n_paths)
+        {
+            if (data->paths[j].len < minor && data->paths[j].valid == 1)
+                minor = data->paths[j].len;
+                index = j;
+            j++;
+        }
+        data->paths_index[i] = index;
+        i++;
+    }
+}
+
 void path_finding(t_data *data)
 {
     //init paths
@@ -176,3 +198,4 @@ void path_finding(t_data *data)
     path_validation(data, paths);
     print_paths(data, paths);
 }
+
