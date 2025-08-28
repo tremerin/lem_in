@@ -43,6 +43,14 @@ int main(void)
     number_of_paths(&data);
     printf("paths: %ld\n", data.n_paths);
     path_finding(&data);
+    data.paths_index = malloc(sizeof(size_t) * 2);
+    data.paths_index[0] = 0;
+    data.paths_index[1] = 2;
+    size_t *paths_len = malloc(sizeof(size_t) * 2);
+    paths_len[0] = 5;
+    paths_len[1] = 5;
+    printf("\n");
+    moving_ants(&data, paths_len, 2);
     free_data(&data);
     return (0);
 }

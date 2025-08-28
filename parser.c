@@ -133,6 +133,9 @@ void    file_parser(t_data *data)
     char    *str = get_next_line(0);
     while (str)
     {
+        //ants
+        if (is_int(str))
+            data->ants = ft_atoi(str);
         //void line
         if (ft_strlen(str) == 1)
         {
