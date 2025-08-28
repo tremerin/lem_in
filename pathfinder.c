@@ -256,7 +256,7 @@ int ford_fulkerson(t_data *data)
     unsigned short *parent = malloc(sizeof(unsigned short) * data->table_size); //padres de cada nodo
     int max_flow = 0; //numero de hormigas que pueden pasar en un turno
 
-    while (bfs(data, data->residual, parent))
+    while (bfs(data, data->residual, parent) == 1)
     {
         int path_flow = INT_MAX;
         
@@ -360,7 +360,7 @@ void find_paths(t_data *data)
         disjunt_paths(data, max_flow);
         for (size_t i = 0; i < data->n_paths; i++)
         {
-            printf("Camino %li: ", i);
+            printf("\nCamino %li: ", i);
             for (size_t j = 0; j < data->paths[i].len; j++)
             {
                 printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
