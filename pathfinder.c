@@ -110,24 +110,29 @@ void order_paths(t_data *data)
 {
     size_t i = 0;
     size_t j = 0;
-    size_t minor = 0;
-    size_t index = 0; 
+    size_t minor;
+    data->paths_index = malloc(sizeof(size_t) * data->n_paths);
+    t_path *temp;
+    size_t index = 0;
     while (i < data->n_paths)
     {
-        minor = data->paths[i].len;
         j = i;
+        minor = data->paths[i].len;
+        index = j;
         while (j < data->n_paths)
         {
-            if (data->paths[j].len < minor && data->paths[j].valid == 1)
+            if (data->paths[j].len < minor)
             {
-                minor = data->paths[j].len;
+                minor = data->paths[i].len;
                 index = j;
             }
             j++;
         }
-        data->paths_index[i] = index;
+        temp = &data->paths[i];
+        data->paths[i] = data->paths[index];
+        data->paths[index] = *temp;
         i++;
-    }
+    } 
 }
 
 void path_finding(t_data *data)
@@ -378,6 +383,7 @@ void find_paths(t_data *data)
             {
                 printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
             }
+            printf("\n");
         }
     }
     else
