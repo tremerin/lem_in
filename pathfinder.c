@@ -119,8 +119,10 @@ void order_paths(t_data *data)
         while (j < data->n_paths)
         {
             if (data->paths[j].len < minor && data->paths[j].valid == 1)
+            {
                 minor = data->paths[j].len;
                 index = j;
+            }
             j++;
         }
         data->paths_index[i] = index;
@@ -298,34 +300,22 @@ int ford_fulkerson(t_data *data)
         {
             unsigned short u = parent[v];
             char current = get_value(data->flow, u, v);
-            (void)current;
-            //pasar current a int
-            //set_value(flow, u, v, current + path_flow)
-            set_value(data->flow, u, v, 1);
+            set_value(data->flow, u, v, current + path_flow);
 
             char reverse = get_value(data->flow, v, u);
-            (void)reverse;
-            //pasar reverse a int
-            //set_value(flow, v, u, current + path_flow)
-            set_value(data->flow, v, u, -1);
+            set_value(data->flow, v, u, reverse - path_flow);
+
+            char current_residual = get_value(data->residual, u, v);
+            set_value(data->residual, u, v, current_residual - path_flow);
+            
+            char reverse_residual = get_value(data->residual, v, u);
+            set_value(data->residual, v, u, reverse_residual + path_flow);
         }
 
         max_flow += path_flow;
-        //update residual
-        int size = data->residual->columns * data->residual->rows;
-        int i = 0;
-        while (i < size)
-        {
-            char t_adj_val = data->t_adjacency->array[i];
-            char flow_val = data->flow->array[i];
-            char res_val = t_adj_val - flow_val;
-            int row = i / data->residual->columns; //calculo la fila
-            int column = i % data->residual->columns; //calculo la columna
-            set_value(data->residual, row, column, res_val); 
-            i++;
-        }
     }
 
+    free(parent);
     return max_flow;
 }
 
@@ -342,7 +332,7 @@ void disjunt_paths(t_data *data, int max_flow)
         unsigned short current = data->p_start;
         data->paths[i].len = 0;
         data->paths[i].nodes = malloc(sizeof(unsigned int) * data->table_size);
-        data->paths[i].nodes[data->paths[i].len++] = current;
+        data->paths[i].nodes[0] = current;
         
         while (current != data->p_end)
         {
@@ -364,7 +354,8 @@ void disjunt_paths(t_data *data, int max_flow)
             }
 
             current = next;
-            data->paths[i].nodes[data->paths[i].len++] = current;
+            data->paths[i].nodes[data->paths[i].len] = current;
+            data->paths[i].len++;
         }
         
     }

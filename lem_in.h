@@ -81,6 +81,7 @@ void        number_of_paths(t_data *data);
 void        path_finding(t_data *data);
 void        print_paths(t_data *data, unsigned int paths);
 int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
+void order_paths(t_data *data);
 
 void init_queue(t_queue *queue, t_data *data);
 int queue_out(t_queue *queue);
