@@ -108,25 +108,22 @@ void    print_paths(t_data *data, unsigned int paths)
 
 void order_paths(t_data *data)
 {
-    size_t i = 0;
-    size_t j = 0;
-    size_t minor = 0;
-    size_t index = 0; 
-    while (i < data->n_paths)
+    data->paths_index = malloc(sizeof(size_t) * data->n_paths);
+    for (size_t i = 0; i < data->n_paths; i++)
     {
-        minor = data->paths[i].len;
-        j = i;
-        while (j < data->n_paths)
+        data->paths_index[i] = i;
+    }
+    for (size_t i = 0; i < data->n_paths - 1; i++)
+    {
+        for (size_t j = 0; j < data->n_paths - 1 - i; j++)
         {
-            if (data->paths[j].len < minor && data->paths[j].valid == 1)
+            if (data->paths[data->paths_index[j]].len > data->paths[data->paths_index[j + 1]].len)
             {
-                minor = data->paths[j].len;
-                index = j;
+                size_t temp = data->paths_index[j];
+                data->paths_index[j] = data->paths_index[j + 1];
+                data->paths_index[j + 1] = temp;
             }
-            j++;
         }
-        data->paths_index[i] = index;
-        i++;
     }
 }
 
@@ -378,6 +375,7 @@ void find_paths(t_data *data)
             {
                 printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
             }
+            printf("\n");
         }
     }
     else

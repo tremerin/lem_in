@@ -41,6 +41,14 @@ int main(void)
     //print_multipliers(data);
     printf("multipliers ok\n");
     find_paths(&data);
+    order_paths(&data);
+    size_t i = 0;
+    while (i < data.n_paths)
+    {
+        printf("path_index: %li\n", data.paths_index[i]);
+        i++;
+    }
+    moving_ants(&data, data.paths_index, data.n_paths);
     free_data(&data);
     return (0);
 }

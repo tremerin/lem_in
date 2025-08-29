@@ -163,7 +163,7 @@ int main(int argc, char** argv)
     while (i < n_paths)
     {
         lens[i] = ft_atoi(argv[i+ 2]);
-        //printf("len[%ld]%ld\n", i, lens[i + 2]);
+        printf("len[%ld]%ld\n", i, lens[i + 2]);
         i++;
     }
     size_t lines = num_lines(ants, lens, n_paths);
