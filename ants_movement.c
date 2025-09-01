@@ -99,6 +99,7 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
     return (first);
 }
 
+
 static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
 {
     size_t i = 0;
@@ -107,6 +108,27 @@ static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
         printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
         i++;
     }
+}
+size_t *path_len_sort(t_data *data)
+{
+    size_t *paths_len = malloc(sizeof(size_t) * data->n_paths);
+    size_t index = 0;
+    for (size_t i = 0; i < data->n_paths; i++)
+    {
+        for (size_t j = 0; j < data->n_paths; j++)
+        {
+            if (index == data->paths_index[j])
+            {
+                paths_len[index] = data->paths[j].len;
+                index++;
+            }
+        }
+    }
+    for (size_t i = 0; i < data->n_paths; i++)
+    {
+        printf("len: %li\n", paths_len[i]);
+    }
+    return paths_len;
 }
 
 void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
@@ -182,7 +204,7 @@ int main(int argc, char** argv)
     while (i < n_paths)
     {
         lens[i] = ft_atoi(argv[i+ 2]);
-        //printf("len[%ld]%ld\n", i, lens[i + 2]);
+        printf("len[%ld]%ld\n", i, lens[i + 2]);
         i++;
     }
     size_t lines = num_lines(ants, lens, n_paths);

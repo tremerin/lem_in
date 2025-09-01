@@ -62,6 +62,7 @@ int main(void)
     }
     size_t *lens = paths_len(&data);
     moving_ants(&data, lens, data.n_paths);
+
     free_data(&data);
     return (0);
 }
