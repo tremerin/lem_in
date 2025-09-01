@@ -15,11 +15,6 @@ void init_data(t_data *data)
 
 void free_data(t_data *data)
 {
-    free(data->dist_start);
-    free(data->dist_end);
-    free(data->multiplier);
-    if (data->paths_index != NULL)
-        free(data->paths_index);
     for (size_t i = 0; i < data->n_paths; i++)
     {
         if(data->paths[i].nodes != NULL)
@@ -57,24 +52,8 @@ int main(void)
     file_parser(&data);
     printf("parser ok\n");
     //print_table(data.t_adjacency);
-    init_distances(&data);
-    assign_distance(data.t_adjacency, data.dist_start, data.p_start, data.p_end);
-    assign_distance(data.t_adjacency, data.dist_end, data.p_end, data.p_start);
-    printf("distances ok\n");
-    //print_distances(&data);
-    weight_table(&data);
-    //print_table(data.t_weights);
-    assing_multiplier(&data);
-    //print_multipliers(data);
-    printf("multipliers ok\n");
     find_paths(&data);
     order_paths(&data);
-    size_t i = 0;
-    while (i < data.n_paths)
-    {
-        printf("index[%ld] %ld\n", i, data.paths[i].len);
-        i++;
-    }
     size_t *lens = paths_len(&data);
     moving_ants(&data, lens, data.n_paths);
     free(lens);

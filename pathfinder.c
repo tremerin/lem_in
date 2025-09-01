@@ -111,7 +111,6 @@ void order_paths(t_data *data)
     size_t i = 0;
     size_t j = 0;
     size_t minor;
-    data->paths_index = malloc(sizeof(size_t) * data->n_paths);
     t_path temp;
     size_t index = 0;
     while (i < data->n_paths)
