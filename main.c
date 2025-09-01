@@ -3,7 +3,7 @@
 void init_data(t_data *data)
 {
 
-    data->names = init_multi_str(4000, 5);
+    data->names = init_multi_str(6000, 5);
     if (!data->names)
     {
         perror("Error: malloc");
@@ -15,11 +15,22 @@ void init_data(t_data *data)
 
 void free_data(t_data *data)
 {
+    free(data->paths->nodes);
+    free(data->paths);
+    free(data->dist_start);
+    free(data->dist_end);
+    free(data->multiplier);
+    if (data->paths_index != NULL)
+        free(data->paths_index);
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
         free_table(data->t_adjacency);    
     if (data->t_weights != NULL)
         free_table(data->t_weights);
+    if (data->flow != NULL)
+        free_table(data->flow);
+    if (data->residual != NULL)
+        free_table(data->residual);
 }
 
 size_t *paths_len(t_data *data)
@@ -62,7 +73,7 @@ int main(void)
     }
     size_t *lens = paths_len(&data);
     moving_ants(&data, lens, data.n_paths);
-
+    free(lens);
     free_data(&data);
     return (0);
 }

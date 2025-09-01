@@ -243,6 +243,7 @@ void queue_in(unsigned short element, t_queue *queue)
 int bfs(t_data * data, t_table *residual, unsigned short *parent)
 {
     unsigned short *visited = malloc(sizeof(unsigned short) * data->table_size);
+    ft_bzero(visited, sizeof(unsigned short) * data->table_size);
     t_queue queue; //queue
 
     init_queue(&queue, data);
@@ -274,6 +275,11 @@ int bfs(t_data * data, t_table *residual, unsigned short *parent)
             }
         }
     }
+
+    if (visited != NULL)
+        free(visited);
+    if (queue.data != NULL)
+        free(queue.data);
     return found_path;
 }
 
@@ -364,6 +370,7 @@ void disjunt_paths(t_data *data, int max_flow)
         }
         
     }
+    free_table(flow_table);
 }
 
 
