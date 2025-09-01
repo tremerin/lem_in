@@ -37,6 +37,13 @@ size_t num_lines(unsigned short ants, size_t *paths_len, size_t n_paths)
 unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_paths)
 {
     unsigned short *assigned = malloc(sizeof(unsigned short) * n_paths);
+    ft_bzero(assigned, sizeof(unsigned short) * n_paths);
+    size_t q = 0;
+    while (q < n_paths)
+    {
+        printf("assigned[%ld] %d\n", q, assigned[q]);
+        q++;
+    }
     size_t lines = 0;
     if (n_paths == 1)
     {
@@ -92,6 +99,16 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
     return (first);
 }
 
+
+static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
+{
+    size_t i = 0;
+    while (i < data->n_paths)
+    {
+        printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
+        i++;
+    }
+}
 size_t *path_len_sort(t_data *data)
 {
     size_t *paths_len = malloc(sizeof(size_t) * data->n_paths);
@@ -120,8 +137,9 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
     printf("ants:%d\n", data->ants);
     printf("lines:%ld\n", lines);
     unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
-    printf("assigned ants[0]: %d\n", assigned_ants[0]);
-    printf("assigned ants[1]: %d\n", assigned_ants[1]);
+    print_assigned_ants(data, assigned_ants);
+    //printf("assigned ants[0]: %d\n", assigned_ants[0]);
+    //printf("assigned ants[1]: %d\n", assigned_ants[1]);
     size_t steps = 0;
     size_t path = 0;
     size_t ants = 0;
@@ -138,7 +156,8 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
                 if ((int)steps - (int)ants < (int)paths_len[path] && (int)steps - (int)ants >= 0)
                 {
                     printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
-                        data->paths[data->paths_index[path]].nodes[steps - ants]));
+                        data->paths[path].nodes[steps - ants]));
+                        //data->paths[data->paths_index[path]].nodes[steps - ants]));
                 }
                 ants++;
             }

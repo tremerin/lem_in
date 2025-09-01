@@ -81,15 +81,15 @@ void        number_of_paths(t_data *data);
 void        path_finding(t_data *data);
 void        print_paths(t_data *data, unsigned int paths);
 int         contain_pos(unsigned short *positions, unsigned int pos, size_t len);
-void order_paths(t_data *data);
+void        order_paths(t_data *data);
 
-void init_queue(t_queue *queue, t_data *data);
-int queue_out(t_queue *queue);
-void queue_in(unsigned short element, t_queue *queue);
-int bfs(t_data * data, t_table *residual, unsigned short *parent);
-int ford_fulkerson(t_data *data);
-void find_paths(t_data *data);
-void disjunt_paths(t_data *data, int max_flow);
+void        init_queue(t_queue *queue, t_data *data);
+int         queue_out(t_queue *queue);
+void        queue_in(unsigned short element, t_queue *queue);
+int         bfs(t_data * data, t_table *residual, unsigned short *parent);
+int         ford_fulkerson(t_data *data);
+void        find_paths(t_data *data);
+void        disjunt_paths(t_data *data, int max_flow);
 
 //group paths
 int         compatible_paths(t_path *path_one, t_path *path_two);
@@ -113,6 +113,6 @@ void        set_value(t_table *table, int row, int colum, char value);
 char        get_value(t_table *table, int row, int colum);
 void        print_table(t_table *table);
 void        free_table(t_table *table);
-t_table *copy_table(t_table *copy);
+t_table     *copy_table(t_table *copy);
 
 #endif

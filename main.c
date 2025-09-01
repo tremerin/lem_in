@@ -22,6 +22,18 @@ void free_data(t_data *data)
         free_table(data->t_weights);
 }
 
+size_t *paths_len(t_data *data)
+{
+    size_t * lens = malloc(sizeof(size_t) * data->n_paths);
+    size_t i = 0;
+    while (i < data->n_paths)
+    {
+        lens[i] = data->paths[i].len;
+        i++;
+    }
+    return (lens);
+}
+
 int main(void)
 {
     t_data data;
@@ -45,13 +57,12 @@ int main(void)
     size_t i = 0;
     while (i < data.n_paths)
     {
-        printf("len: %li\n", data.paths[i].len);
-        printf("path_index: %li\n", data.paths_index[i]);
+        printf("index[%ld] %ld\n", i, data.paths[i].len);
         i++;
     }
-    size_t *paths_len = path_len_sort(&data);
-    (void)paths_len;
-    //moving_ants(&data, paths_len, data.n_paths);
+    size_t *lens = paths_len(&data);
+    moving_ants(&data, lens, data.n_paths);
+
     free_data(&data);
     return (0);
 }
