@@ -123,10 +123,10 @@ void order_paths(t_data *data)
         {
             if (data->paths[j].len < minor)
             {
-                size_t temp = data->paths_index[j];
-                data->paths_index[j] = data->paths_index[j + 1];
-                data->paths_index[j + 1] = temp;
+                minor = data->paths[j].len;
+                index = j;
             }
+            j++;
         }
         temp = data->paths[i];
         data->paths[i] = data->paths[index];
