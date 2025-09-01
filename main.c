@@ -15,13 +15,17 @@ void init_data(t_data *data)
 
 void free_data(t_data *data)
 {
-    free(data->paths->nodes);
-    free(data->paths);
     free(data->dist_start);
     free(data->dist_end);
     free(data->multiplier);
     if (data->paths_index != NULL)
         free(data->paths_index);
+    for (size_t i = 0; i < data->n_paths; i++)
+    {
+        if(data->paths[i].nodes != NULL)
+            free(data->paths[i].nodes);
+    }
+    free(data->paths);
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
         free_table(data->t_adjacency);    
