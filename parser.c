@@ -128,14 +128,20 @@ void    file_parser(t_data *data)
     int     start = 0;
     int     end = 0;
     char    *name;
+    data->ants = 0;
     size_t  i = 0;
 
     char    *str = get_next_line(0);
     while (str)
     {
         //ants
-        if (is_int(str))
-            data->ants = ft_atoi(str);
+        if (is_int(str) && data->ants == 0)
+        {
+            if (data->ants == 0)
+                data->ants = ft_atoi(str);
+            else
+                break ;
+        }
         //void line
         if (ft_strlen(str) == 1)
         {
@@ -155,7 +161,7 @@ void    file_parser(t_data *data)
                 exit(EXIT_FAILURE);
             }
         }
-        else if (start == 1)
+        else if (start == 1 && is_room(str))
         {
             start++;
             data->p_start = i;
@@ -172,7 +178,7 @@ void    file_parser(t_data *data)
                 exit(EXIT_FAILURE);
             }
         }
-        else if (end == 1)
+        else if (end == 1  && is_room(str))
         {
             end++;
             data->p_end = i;
@@ -195,7 +201,30 @@ void    file_parser(t_data *data)
             }
             read_link(data, str);
         }
+        else if (!ft_strncmp(str, "#", 1) == 0 && !is_int(str))
+            break ;
+        printf("%s", str);
         free(str);
         str = get_next_line(0);
+    }
+    if (start < 2)
+    {
+        perror("Error: no start");
+        if (data->names != NULL)
+            free_multi_str(data->names);
+        exit(EXIT_FAILURE);
+    }
+    if (end < 2)
+    {
+        perror("Error: no end");
+        if (data->names != NULL)
+            free_multi_str(data->names);
+        exit(EXIT_FAILURE);
+    }
+    if (data->t_adjacency == NULL)
+    {
+        perror("Error: insufficient data");
+        free_multi_str(data->names);
+        exit(EXIT_FAILURE);
     }
 }
