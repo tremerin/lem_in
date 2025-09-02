@@ -396,5 +396,6 @@ void find_paths(t_data *data)
     {
         //no encuentra camino
         printf("No hay camino posible\n");
+        exit(EXIT_FAILURE);
     }
 }
