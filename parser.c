@@ -54,6 +54,8 @@ int     is_link(char *str)
     size_t  i;
     size_t  dash;
 
+    if (is_room(str))
+        printf("%s is room\n", str);
     i = 0;
     dash = 0;
     if (str[i] == ' ' || str[i] == '-')
@@ -101,7 +103,6 @@ void    read_link(t_data *data, char *link)
     size_t  len = ft_strlen(link);
     int     pos_name_one;
     int     pos_name_two;
-
     if (link[len -1] == '\n')
         len--;
     while (link[i])
@@ -135,20 +136,22 @@ void    file_parser(t_data *data)
     while (str)
     {
         //ants
-        if (is_int(str) && data->ants == 0)
+        if (is_int(str))
         {
             if (data->ants == 0)
+            {
                 data->ants = ft_atoi(str);
+                printf("%s", str);
+                free(str);
+                str = get_next_line(0);
+                continue;
+            }
             else
                 break ;
         }
         //void line
-        if (ft_strlen(str) == 1)
-        {
-            printf("void line\n");
-            //try
+        if (str[0] == '\n')
             break ;
-        }
         //check start
         if (ft_strncmp(str, "##start\n", 9) == 0)
         {
@@ -180,6 +183,7 @@ void    file_parser(t_data *data)
         }
         else if (end == 1  && is_room(str))
         {
+            printf("str: %s", str);
             end++;
             data->p_end = i;
         }
@@ -201,7 +205,7 @@ void    file_parser(t_data *data)
             }
             read_link(data, str);
         }
-        else if (!ft_strncmp(str, "#", 1) == 0 && !is_int(str))
+        else if (!ft_strncmp(str, "#", 1) == 0)// && !is_int(str))
             break ;
         printf("%s", str);
         free(str);
@@ -214,6 +218,7 @@ void    file_parser(t_data *data)
             free_multi_str(data->names);
         exit(EXIT_FAILURE);
     }
+    printf("end %d\n", end); //test 
     if (end < 2)
     {
         perror("Error: no end");

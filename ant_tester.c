@@ -34,6 +34,18 @@ size_t num_lines(unsigned short ants, size_t *paths_len, size_t n_paths)
     return (lines);
 }
 
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	index;
+
+	index = 0;
+	while (index < n)
+	{
+		((unsigned char *)s)[index] = '\0';
+		index++;
+	}
+}
+
 unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_paths)
 {
     unsigned short *assigned = malloc(sizeof(unsigned short) * n_paths);
@@ -97,45 +109,59 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
 static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
 {
     size_t i = 0;
-    while (i < data->paths.num_paths)
+    while (i < data->n_paths)
     {
         printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
         i++;
     }
 }
 
-void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
+int	ft_atoi(const char *str)
 {
-    size_t lines = num_lines(data->ants, paths_len, n_paths);
-    printf("ants:%d\n", data->ants);
-    printf("lines:%ld\n", lines);
-    unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
-    print_assigned_ants(data, assigned_ants);
-    size_t steps = 0;
-    size_t path = 0;
-    size_t ants = 0;
-    unsigned short ant_num = 0;
-    while (steps < lines)
+	int	i;
+	int	num;
+	int	sig;
+
+	i = 0;
+	num = 0;
+	sig = 1;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
+		|| str[i] == '\n' || str[i] == '\r' || str[i] == '\f')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sig = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num = (num * 10) + str[i] - '0';
+		i++;
+	}
+	return (num * sig);
+}
+
+int main(int argc, char** argv)
+{
+    size_t *lens = malloc(sizeof(size_t) * argc);
+    size_t ants = ft_atoi(argv[1]);
+    size_t i = 0;
+    size_t n_paths = argc - 2;
+    while (i < n_paths)
     {
-        path = 0;
-        while (path < n_paths)
-        {
-            ants = 0;
-            ant_num = first_ant(path, assigned_ants);
-            while (ants < assigned_ants[path])
-            {
-                if ((int)steps - (int)ants < (int)paths_len[path] && (int)steps - (int)ants >= 0)
-                {
-                    printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
-                        data->paths.paths[path].nodes[steps - ants]));
-                        //data->paths[data->paths_index[path]].nodes[steps - ants]));
-                }
-                ants++;
-            }
-            path++;
-        }
-        printf("\n");
-        steps++;
+        lens[i] = ft_atoi(argv[i+ 2]);
+        printf("len[%ld]%ld\n", i, lens[i + 2]);
+        i++;
     }
-    free(assigned_ants);
+    size_t lines = num_lines(ants, lens, n_paths);
+    printf("lines: %ld\n", lines);
+    unsigned short *paths = assign_ants(ants, lens, n_paths);
+    i = 0;
+    while (i < n_paths)
+    {
+        printf("path[%ld] %d\n", i, paths[i]);
+        i++;
+    }
+    return (0);
 }
