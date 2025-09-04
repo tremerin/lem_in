@@ -20,7 +20,15 @@ typedef struct s_path
     size_t          len;
     unsigned short	*nodes;
     unsigned short  valid;
+    unsigned short  cost;
 }   t_path;
+
+typedef struct s_path_set
+{
+    size_t  num_paths;
+    t_path  *paths;
+    int     total_cost;
+}   t_path_set;
 
 typedef struct s_table
 {
@@ -54,7 +62,7 @@ typedef struct s_data
     short int       *multiplier;
     size_t          valid_paths;
     size_t          n_paths;
-    t_path          *paths;
+    t_path_set      paths;
     unsigned short  **groups;
 }   t_data;
 

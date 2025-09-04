@@ -15,30 +15,30 @@ void init_data(t_data *data)
 
 void free_data(t_data *data)
 {
-    for (size_t i = 0; i < data->n_paths; i++)
+    for (size_t i = 0; i < data->paths.num_paths; i++)
     {
-        if(data->paths[i].nodes != NULL)
-            free(data->paths[i].nodes);
+        if(data->paths.paths[i].nodes != NULL)
+            free(data->paths.paths[i].nodes);
     }
-    free(data->paths);
+    free(data->paths.paths);
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
         free_table(data->t_adjacency);    
     if (data->t_weights != NULL)
         free_table(data->t_weights);
-    if (data->flow != NULL)
-        free_table(data->flow);
+    // if (data->flow != NULL)
+    //     free_table(data->flow);
     if (data->residual != NULL)
         free_table(data->residual);
 }
 
 size_t *paths_len(t_data *data)
 {
-    size_t * lens = malloc(sizeof(size_t) * data->n_paths);
+    size_t * lens = malloc(sizeof(size_t) * data->paths.num_paths);
     size_t i = 0;
-    while (i < data->n_paths)
+    while (i < data->paths.num_paths)
     {
-        lens[i] = data->paths[i].len;
+        lens[i] = data->paths.paths[i].len;
         i++;
     }
     return (lens);
@@ -55,7 +55,7 @@ int main(void)
     find_paths(&data);
     order_paths(&data);
     size_t *lens = paths_len(&data);
-    moving_ants(&data, lens, data.n_paths);
+    moving_ants(&data, lens, data.paths.num_paths);
     free(lens);
     free_data(&data);
     return (0);

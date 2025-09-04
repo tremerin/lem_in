@@ -97,7 +97,7 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
 static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
 {
     size_t i = 0;
-    while (i < data->n_paths)
+    while (i < data->paths.num_paths)
     {
         printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
         i++;
@@ -127,7 +127,7 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
                 if ((int)steps - (int)ants < (int)paths_len[path] && (int)steps - (int)ants >= 0)
                 {
                     printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
-                        data->paths[path].nodes[steps - ants]));
+                        data->paths.paths[path].nodes[steps - ants]));
                         //data->paths[data->paths_index[path]].nodes[steps - ants]));
                 }
                 ants++;
