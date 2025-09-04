@@ -135,20 +135,22 @@ void    file_parser(t_data *data)
     while (str)
     {
         //ants
-        if (is_int(str) && data->ants == 0)
+        if (is_int(str))
         {
             if (data->ants == 0)
+            {
                 data->ants = ft_atoi(str);
+                printf("%s", str);
+                free(str);
+                str = get_next_line(0);
+                continue;
+            }
             else
                 break ;
         }
         //void line
-        if (ft_strlen(str) == 1)
-        {
-            printf("void line\n");
-            //try
+        if (str[0] == '\n')
             break ;
-        }
         //check start
         if (ft_strncmp(str, "##start\n", 9) == 0)
         {
@@ -201,7 +203,7 @@ void    file_parser(t_data *data)
             }
             read_link(data, str);
         }
-        else if (!ft_strncmp(str, "#", 1) == 0 && !is_int(str))
+        else if (!ft_strncmp(str, "#", 1) == 0)// && !is_int(str))
             break ;
         printf("%s", str);
         free(str);
