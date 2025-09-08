@@ -321,7 +321,7 @@ t_path extract_path_from_parent(t_data *data, unsigned short *parent, unsigned s
     //contar longitud del camino
     int length = 0;
     unsigned short current = data->p_end;
-    while (current != (unsigned short)-1) {
+    while (current != data->p_start) {
         length++;
         current = parent[current];
     }
