@@ -211,6 +211,7 @@ void    file_parser(t_data *data)
         free(str);
         str = get_next_line(0);
     }
+    printf("\n");
     if (start < 2)
     {
         perror("Error: no start");
@@ -239,7 +240,6 @@ void    file_parser2(t_data *data)
     int     start = 0;
     int     end = 0;
     char    *str = NULL;
-    char    *error = NULL;
     data->ants = 0;
     size_t  rooms = 0;
 
@@ -252,12 +252,17 @@ void    file_parser2(t_data *data)
             if (is_room(str))
             {
                 add_room_name(data->names, str);
-                rooms++;
                 if (start == 1)
                 {
                     start++;
                     data->p_start = rooms;
                 }
+                else if (end == 1)
+                {
+                    end++;
+                    data->p_end = rooms;
+                }
+                rooms++;
             }
             //check start
             else if (ft_strncmp(str, "##start\n", 9) == 0)
@@ -266,14 +271,13 @@ void    file_parser2(t_data *data)
                     start++;
                 else if (start > 1)
                 {
-                    error = ft_strdup("Error: more than one entry");
-                    perror(error);
+                    perror("Error: more than one entry");
                     free(str);
                     exit(EXIT_FAILURE);
                 }
             }
             //check end
-            if (ft_strncmp(str, "##end\n", 7) == 0)
+            else if (ft_strncmp(str, "##end\n", 7) == 0)
             {
                 if (end == 0)
                     end++;
@@ -284,13 +288,11 @@ void    file_parser2(t_data *data)
                     exit(EXIT_FAILURE);
                 }
             }
-            else if (start == 1)
+            else if (start == 1 || end == 1)
             {
-
-            }
-            else if (end == 1)
-            {
-
+                printf("%s", str);
+                free(str);
+                break ;
             }
             //create table
             else if (is_link(str))
@@ -340,5 +342,25 @@ void    file_parser2(t_data *data)
         free(str);
         str = get_next_line(0);
     }
-
+    printf("\n");
+    if (start < 2)
+    {
+        perror("Error: no start");
+        if (data->names != NULL)
+            free_multi_str(data->names);
+        exit(EXIT_FAILURE);
+    }
+    else if (end < 2)
+    {
+        perror("Error: no end");
+        if (data->names != NULL)
+            free_multi_str(data->names);
+        exit(EXIT_FAILURE);
+    }
+    else if (data->t_adjacency == NULL)
+    {
+        perror("Error: insufficient data");
+        free_multi_str(data->names);
+        exit(EXIT_FAILURE);
+    }
 }
