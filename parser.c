@@ -333,9 +333,9 @@ void    file_parser2(t_data *data)
             }
             else if (!ft_strncmp(str, "#", 1) == 0)
             {
-                printf("%s", str);
-                free(str);
-                break ;
+                    perror("Error: no ants");
+                    free(str);
+                    exit(EXIT_FAILURE);
             }  
         }
         printf("%s", str);
