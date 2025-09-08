@@ -129,6 +129,30 @@ void order_paths(t_data *data)
         data->paths.paths[index] = temp;
         i++;
     }
+    i = 0;
+    j = 0;
+    size_t minor_ff;
+    t_path temp_ff;
+    index = 0;
+    while (i < data->ff_paths.n_paths)
+    {
+        j = i;
+        minor_ff = data->ff_paths.paths[i].len;
+        index = j;
+        while (j < data->ff_paths.n_paths)
+        {
+            if (data->ff_paths.paths[j].len < minor_ff)
+            {
+                minor_ff = data->ff_paths.paths[j].len;
+                index = j;
+            }
+            j++;
+        }
+        temp_ff = data->ff_paths.paths[i];
+        data->ff_paths.paths[i] = data->ff_paths.paths[index];
+        data->ff_paths.paths[index] = temp_ff;
+        i++;
+    }
 }
 
 // void path_finding(t_data *data)
@@ -202,7 +226,7 @@ void order_paths(t_data *data)
 //     print_paths(data, paths);
 // }
 
-//init queue
+
 void init_queue(t_queue *queue, t_data *data)
 {
     queue->data = malloc(sizeof(unsigned short) * data->table_size);
@@ -212,7 +236,7 @@ void init_queue(t_queue *queue, t_data *data)
     queue->rear = -1;
 }
 
-//sacar elementos de queue
+
 int queue_out(t_queue *queue)
 {
     if (queue->size > 0)
@@ -225,7 +249,7 @@ int queue_out(t_queue *queue)
     return -1;
 }
 
-//añadir elementos en queue
+
 void queue_in(unsigned short element, t_queue *queue)
 {
     if (queue->size < queue->capacity)
@@ -294,7 +318,7 @@ t_path extract_path_from_parent(t_data *data, unsigned short *parent, unsigned s
 {
     t_path path;
     
-    // Contar longitud del camino
+    //contar longitud del camino
     int length = 0;
     unsigned short current = data->p_end;
     while (current != (unsigned short)-1) {
@@ -302,12 +326,12 @@ t_path extract_path_from_parent(t_data *data, unsigned short *parent, unsigned s
         current = parent[current];
     }
     
-    // Crear array de nodos
+    //crear array de nodos
     path.nodes = malloc(length * sizeof(unsigned short));
     path.len = length;
     path.cost = distance[data->p_end];
     
-    // Llenar array desde el final hacia atrás
+    //llenar array desde el final hacia atrás
     current = data->p_end;
     for (int i = length - 1; i >= 0; i--) {
         path.nodes[i] = current;
@@ -318,7 +342,7 @@ t_path extract_path_from_parent(t_data *data, unsigned short *parent, unsigned s
 }
 
 
-t_path_set suurballe_tarjan_with_your_bfs(t_data *data, int max_paths)
+void suurballe_tarjan(t_data *data, int max_paths)
 {
     data->paths.paths = malloc(max_paths * sizeof(t_path));
     data->paths.num_paths = 0;
@@ -332,20 +356,20 @@ t_path_set suurballe_tarjan_with_your_bfs(t_data *data, int max_paths)
     
     for (int k = 0; k < max_paths; k++) {
         if (!bfs_shortest(data, data->residual, parent, distance)) {
-            break; // No hay más caminos
+            break; //no hay más caminos
         }
         
-        // Si el camino tiene costo no positivo después del primero, parar
+        //si el camino tiene costo no positivo después del primero, parar
         if (distance[data->p_end] <= 0 && k > 0) {
             break;
         }
         
-        // Extraer camino
+        //extraer camino
         data->paths.paths[data->paths.num_paths] = extract_path_from_parent(data, parent, distance);
         data->paths.total_cost += data->paths.paths[data->paths.num_paths].cost;
         data->paths.num_paths++;
         
-        // Actualizar tabla residual
+        //actualizar tabla residual
         for (unsigned short v = data->p_end; v != data->p_start; v = parent[v])
         {
             unsigned short u = parent[v];
@@ -361,14 +385,10 @@ t_path_set suurballe_tarjan_with_your_bfs(t_data *data, int max_paths)
                 set_value(data->residual, u, v, current - 1);
             }
         }
-        
-        printf("Camino %d: costo %d\n", k + 1, data->paths.paths[data->paths.num_paths - 1].cost);
     }
     
     free(parent);
     free(distance);
-    
-    return data->paths;
 }
 
 
@@ -418,13 +438,13 @@ int bfs(t_data * data, t_table *residual, unsigned short *parent)
 
 int ford_fulkerson(t_data *data)
 {
-    data->flow = init_table(data->t_adjacency->columns, data->t_adjacency->rows, 0);
-    data->residual = copy_table(data->t_adjacency);
+    data->ff_flow = init_table(data->t_adjacency->columns, data->t_adjacency->rows, 0);
+    data->ff_residual = copy_table(data->t_adjacency);
 
     unsigned short *parent = malloc(sizeof(unsigned short) * data->table_size); //padres de cada nodo
     int max_flow = 0; //numero de hormigas que pueden pasar en un turno
 
-    while (bfs(data, data->residual, parent) == 1)
+    while (bfs(data, data->ff_residual, parent) == 1)
     {
         int path_flow = INT_MAX;
         
@@ -432,7 +452,7 @@ int ford_fulkerson(t_data *data)
         for (unsigned short v = data->p_end; v != data->p_start; v = parent[v])
         {
             unsigned short u = parent[v];
-            int r_capacity = get_value(data->residual, u, v);
+            int r_capacity = get_value(data->ff_residual, u, v);
             if (r_capacity < path_flow)
             {
                 path_flow = r_capacity;
@@ -443,17 +463,17 @@ int ford_fulkerson(t_data *data)
         for (unsigned short v = data->p_end; v != data->p_start; v = parent[v])
         {
             unsigned short u = parent[v];
-            char current = get_value(data->flow, u, v);
-            set_value(data->flow, u, v, current + path_flow);
+            char current = get_value(data->ff_flow, u, v);
+            set_value(data->ff_flow, u, v, current + path_flow);
 
-            char reverse = get_value(data->flow, v, u);
-            set_value(data->flow, v, u, reverse - path_flow);
+            char reverse = get_value(data->ff_flow, v, u);
+            set_value(data->ff_flow, v, u, reverse - path_flow);
 
-            char current_residual = get_value(data->residual, u, v);
-            set_value(data->residual, u, v, current_residual - path_flow);
+            char current_residual = get_value(data->ff_residual, u, v);
+            set_value(data->ff_residual, u, v, current_residual - path_flow);
             
-            char reverse_residual = get_value(data->residual, v, u);
-            set_value(data->residual, v, u, reverse_residual + path_flow);
+            char reverse_residual = get_value(data->ff_residual, v, u);
+            set_value(data->ff_residual, v, u, reverse_residual + path_flow);
         }
 
         max_flow += path_flow;
@@ -464,74 +484,62 @@ int ford_fulkerson(t_data *data)
 }
 
 
-// void disjunt_paths(t_data *data, int max_flow)
-// {
-//     t_table *flow_table = copy_table(data->flow);
+void disjunt_paths(t_data *data, int max_flow)
+{
+    t_table *flow_table = copy_table(data->ff_flow);
     
-//     data->n_paths = max_flow;
-//     data->paths = malloc(sizeof(t_path) * data->n_paths);
+    data->ff_paths.n_paths = max_flow;
+    data->ff_paths.paths = malloc(sizeof(t_path) * data->ff_paths.n_paths);
     
-//     for (int i = 0; i < max_flow; i++)
-//     {
-//         unsigned short current = data->p_start;
-//         data->paths[i].len = 0;
-//         data->paths[i].nodes = malloc(sizeof(unsigned int) * data->table_size);
-//         data->paths[i].nodes[0] = current;
+    for (int i = 0; i < max_flow; i++)
+    {
+        unsigned short current = data->p_start;
+        data->ff_paths.paths[i].len = 0;
+        data->ff_paths.paths[i].nodes = malloc(sizeof(unsigned int) * data->table_size);
+        data->ff_paths.paths[i].nodes[0] = current;
         
-//         while (current != data->p_end)
-//         {
-//             unsigned short next = -1;
+        while (current != data->p_end)
+        {
+            unsigned short next = -1;
 
-//             for (unsigned short v = 0; v < data->table_size; v++)
-//             {
-//                 if (get_value(flow_table, current, v) > 0)
-//                 {
-//                     next = v;
-//                     set_value(flow_table, current, v, 0);
-//                     break;
-//                 }
-//             }
+            for (unsigned short v = 0; v < data->table_size; v++)
+            {
+                if (get_value(flow_table, current, v) > 0)
+                {
+                    next = v;
+                    set_value(flow_table, current, v, 0);
+                    break;
+                }
+            }
 
-//             if (next == (unsigned short)-1)
-//             {
-//                 break; //no hay más flujo
-//             }
+            if (next == (unsigned short)-1)
+            {
+                break; //no hay más flujo
+            }
 
-//             current = next;
-//             data->paths[i].nodes[data->paths[i].len] = current;
-//             data->paths[i].len++;
-//         }
+            current = next;
+            data->ff_paths.paths[i].nodes[data->ff_paths.paths[i].len] = current;
+            data->ff_paths.paths[i].len++;
+        }
         
-//     }
-//     free_table(flow_table);
-// }
+    }
+    free_table(flow_table);
+}
 
 
 void find_paths(t_data *data)
 {
-    t_path_set path_set = suurballe_tarjan_with_your_bfs(data, 15);
-    (void)path_set;
-    // int max_flow = ford_fulkerson(data);
-
-    // if (max_flow)
-    // {
-    //     //encontrar los caminos disjuntos
-    //     printf("Número de caminos disjuntos: %d\n", max_flow);
-    //     disjunt_paths(data, max_flow);
-    //     for (size_t i = 0; i < data->n_paths; i++)
-    //     {
-    //         printf("\nCamino %li: ", i);
-    //         for (size_t j = 0; j < data->paths[i].len; j++)
-    //         {
-    //             printf("%s ", str_pos(data->names, data->paths[i].nodes[j]));
-    //         }
-    //         printf("\n");
-    //     }
-    // }
-    // else
-    // {
-    //     //no encuentra camino
-    //     printf("No hay camino posible\n");
-    //     exit(EXIT_FAILURE);
-    // }
+    // if data->table_size > 1000: no ejecutar ff
+    int max_flow = ford_fulkerson(data);
+    if (max_flow)
+    {
+        disjunt_paths(data, max_flow);
+    }
+    else
+    {
+        //no encuentra camino
+        printf("No hay camino posible\n");
+        exit(EXIT_FAILURE);
+    }
+    suurballe_tarjan(data, 15);
 }
