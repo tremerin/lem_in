@@ -26,10 +26,10 @@ void free_data(t_data *data)
         free_table(data->t_adjacency);    
     if (data->t_weights != NULL)
         free_table(data->t_weights);
-    // if (data->flow != NULL)
-    //     free_table(data->flow);
-    if (data->residual != NULL)
-        free_table(data->residual);
+    // if (data->ff_flow != NULL)
+    //     free_table(data->ff_flow);
+    if (data->ff_residual != NULL)
+        free_table(data->ff_residual);
 }
 
 size_t *paths_len(t_data *data)
@@ -44,6 +44,20 @@ size_t *paths_len(t_data *data)
     return (lens);
 }
 
+
+size_t *ff_paths_len(t_data *data)
+{
+    size_t * lens = malloc(sizeof(size_t) * data->ff_paths.n_paths);
+    size_t i = 0;
+    while (i < data->ff_paths.n_paths)
+    {
+        lens[i] = data->ff_paths.paths[i].len;
+        i++;
+    }
+    return (lens);
+}
+
+
 int main(void)
 {
     t_data data;
@@ -55,7 +69,20 @@ int main(void)
     find_paths(&data);
     order_paths(&data);
     size_t *lens = paths_len(&data);
-    moving_ants(&data, lens, data.paths.num_paths);
+    size_t *ff_lens = ff_paths_len(&data);
+    size_t lines = num_lines(data.ants, lens, data.paths.num_paths);
+    size_t ff_lines = num_lines(data.ants, ff_lens, data.ff_paths.n_paths);
+    if (lines < ff_lines)
+    {
+        data.n_algo = 0;
+        moving_ants(&data, lens, data.paths.num_paths, lines);
+    }
+    else
+    {
+        data.n_algo = 1;
+        moving_ants(&data, ff_lens, data.ff_paths.n_paths, ff_lines);
+    }
+    printf("lines suurballe: %li lines ff: %li\n", lines, ff_lines);
     free(lens);
     free_data(&data);
     return (0);

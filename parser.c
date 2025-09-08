@@ -183,7 +183,7 @@ void    file_parser(t_data *data)
         }
         else if (end == 1  && is_room(str))
         {
-            printf("str: %s", str);
+            //printf("str: %s", str);
             end++;
             data->p_end = i;
         }

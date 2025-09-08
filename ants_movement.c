@@ -97,18 +97,27 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
 static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
 {
     size_t i = 0;
-    while (i < data->paths.num_paths)
+    size_t n = 0;
+    if (data->n_algo == 1)
+    {
+        n = data->ff_paths.n_paths;
+    }
+    else
+    {
+        n = data->paths.num_paths;
+    }
+    while (i < n)
     {
         printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
         i++;
     }
 }
 
-void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
+void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines)
 {
-    size_t lines = num_lines(data->ants, paths_len, n_paths);
-    printf("ants:%d\n", data->ants);
-    printf("lines:%ld\n", lines);
+    // size_t lines = num_lines(data->ants, paths_len, n_paths);
+    // printf("ants:%d\n", data->ants);
+    // printf("lines:%ld\n", lines);
     unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
     print_assigned_ants(data, assigned_ants);
     size_t steps = 0;
@@ -126,9 +135,18 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths)
             {
                 if ((int)steps - (int)ants < (int)paths_len[path] && (int)steps - (int)ants >= 0)
                 {
-                    printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
-                        data->paths.paths[path].nodes[steps - ants]));
-                        //data->paths[data->paths_index[path]].nodes[steps - ants]));
+                    if (data->n_algo == 1)
+                    {
+                        printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
+                            data->ff_paths.paths[path].nodes[steps - ants]));
+                            //data->paths[data->paths_index[path]].nodes[steps - ants]));
+                    }
+                    else
+                    {
+                        printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
+                            data->paths.paths[path].nodes[steps - ants]));
+                            //data->paths[data->paths_index[path]].nodes[steps - ants]));
+                    }
                 }
                 ants++;
             }

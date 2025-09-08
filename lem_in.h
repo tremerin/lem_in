@@ -30,6 +30,12 @@ typedef struct s_path_set
     int     total_cost;
 }   t_path_set;
 
+typedef struct s_ff_path
+{
+    size_t  n_paths;
+    t_path  *paths;
+}   t_ff_path;
+
 typedef struct s_table
 {
     unsigned int    rows;
@@ -53,17 +59,20 @@ typedef struct s_data
     t_multi_str     *names;
 	t_table			*t_adjacency;
     t_table         *t_weights;
-    t_table         *flow;
     t_table         *residual;
+    t_table         *ff_flow;
+    t_table         *ff_residual;
     size_t          table_size;
     size_t          max_forks;
     short int       *dist_start;
     short int       *dist_end;
     short int       *multiplier;
     size_t          valid_paths;
-    size_t          n_paths;
+    //size_t          n_paths;
     t_path_set      paths;
+    t_ff_path       ff_paths;
     unsigned short  **groups;
+    unsigned short  n_algo;
 }   t_data;
 
 //parser
@@ -94,6 +103,9 @@ int         bfs(t_data * data, t_table *residual, unsigned short *parent);
 int         ford_fulkerson(t_data *data);
 void        find_paths(t_data *data);
 void        disjunt_paths(t_data *data, int max_flow);
+int         bfs_shortest(t_data * data, t_table *residual, unsigned short *parent, unsigned short *distance);
+t_path      extract_path_from_parent(t_data *data, unsigned short *parent, unsigned short *distance);
+void        suurballe_tarjan(t_data *data, int max_paths);
 
 //group paths
 int         compatible_paths(t_path *path_one, t_path *path_two);
@@ -101,7 +113,7 @@ void        group_paths(t_data *data, unsigned int paths);
 
 //ants movement
 size_t      num_lines(unsigned short ants, size_t *paths_len, size_t n_paths);
-void        moving_ants(t_data *data, size_t *paths_len, size_t n_paths);
+void        moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines);
 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);
