@@ -115,9 +115,6 @@ static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
 
 void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines)
 {
-    // size_t lines = num_lines(data->ants, paths_len, n_paths);
-    // printf("ants:%d\n", data->ants);
-    // printf("lines:%ld\n", lines);
     unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
     print_assigned_ants(data, assigned_ants);
     size_t steps = 0;

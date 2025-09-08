@@ -20,16 +20,24 @@ void free_data(t_data *data)
         if(data->paths.paths[i].nodes != NULL)
             free(data->paths.paths[i].nodes);
     }
+    for (size_t i = 0; i < data->ff_paths.n_paths; i++)
+    {
+        if(data->ff_paths.paths[i].nodes != NULL)
+            free(data->ff_paths.paths[i].nodes);
+    }
     free(data->paths.paths);
+    free(data->ff_paths.paths);
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
         free_table(data->t_adjacency);    
     if (data->t_weights != NULL)
         free_table(data->t_weights);
-    // if (data->ff_flow != NULL)
-    //     free_table(data->ff_flow);
+    if (data->ff_flow != NULL)
+         free_table(data->ff_flow);
     if (data->ff_residual != NULL)
         free_table(data->ff_residual);
+    if (data->residual != NULL)
+        free_table(data->residual);
 }
 
 size_t *paths_len(t_data *data)
@@ -65,7 +73,6 @@ int main(void)
     printf("init ok\n");
     file_parser2(&data);
     printf("parser ok\n");
-    //print_table(data.t_adjacency);
     find_paths(&data);
     order_paths(&data);
     size_t *lens = paths_len(&data);
@@ -84,6 +91,7 @@ int main(void)
     }
     printf("lines suurballe: %li lines ff: %li\n", lines, ff_lines);
     free(lens);
+    free(ff_lens);
     free_data(&data);
     return (0);
 }
