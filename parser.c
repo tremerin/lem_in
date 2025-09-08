@@ -218,7 +218,6 @@ void    file_parser(t_data *data)
             free_multi_str(data->names);
         exit(EXIT_FAILURE);
     }
-    printf("end %d\n", end); //test 
     if (end < 2)
     {
         perror("Error: no end");
@@ -232,4 +231,114 @@ void    file_parser(t_data *data)
         free_multi_str(data->names);
         exit(EXIT_FAILURE);
     }
+}
+
+void    file_parser2(t_data *data)
+{
+    int     control = 0; //ants = 0, rooms = 1, links = 2
+    int     start = 0;
+    int     end = 0;
+    char    *str = NULL;
+    char    *error = NULL;
+    data->ants = 0;
+    size_t  rooms = 0;
+
+    str = get_next_line(0);
+    while (str)
+    {
+        //waiting rooms
+        if (control == 1)
+        {
+            if (is_room(str))
+            {
+                add_room_name(data->names, str);
+                rooms++;
+                if (start == 1)
+                {
+                    start++;
+                    data->p_start = rooms;
+                }
+            }
+            //check start
+            else if (ft_strncmp(str, "##start\n", 9) == 0)
+            {
+                if (start == 0)
+                    start++;
+                else if (start > 1)
+                {
+                    error = ft_strdup("Error: more than one entry");
+                    perror(error);
+                    free(str);
+                    exit(EXIT_FAILURE);
+                }
+            }
+            //check end
+            if (ft_strncmp(str, "##end\n", 7) == 0)
+            {
+                if (end == 0)
+                    end++;
+                else if (end > 1)
+                {
+                    perror("Error: more than one exit");
+                    free(str);
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else if (start == 1)
+            {
+
+            }
+            else if (end == 1)
+            {
+
+            }
+            //create table
+            else if (is_link(str))
+            {
+                data->t_adjacency = init_table(rooms, rooms, 0);
+                data->table_size = rooms;
+                control = 2;
+                read_link(data, str);
+            }
+            else if (!ft_strncmp(str, "#", 1) == 0)
+            {
+                printf("%s", str);
+                free(str);
+                break ;
+            }  
+        }
+        //waiting links
+        else if (control == 2)
+        {
+            if (is_link(str))
+            {
+                read_link(data, str);
+            }
+            else if (!ft_strncmp(str, "#", 1) == 0)
+            {
+                printf("%s", str);
+                free(str);
+                break ;
+            }  
+        }
+        //waiting ants
+        else if (control == 0)
+        {
+            if (is_int(str))
+            {
+                data->ants = ft_atoi(str);
+                control = 1;
+            }
+            else if (!ft_strncmp(str, "#", 1) == 0)
+            {
+                printf("%s", str);
+                free(str);
+                break ;
+            }  
+        }
+        printf("%s", str);
+        free(str);
+        str = get_next_line(0);
+    }
+
 }
