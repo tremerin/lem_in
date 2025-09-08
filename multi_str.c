@@ -37,6 +37,21 @@ void    add_str(t_multi_str *multi, char *str)
     multi->count++;
 }
 
+void    add_room_name(t_multi_str *multi, char *str)
+{
+    size_t  i = multi->count * multi->len_str;
+    size_t  j = 0;
+    size_t  end = i + multi->len_str -1;
+    while (i < end && str[j] && str[j] != ' ')
+    {
+        multi->array[i] = str[j];
+        i++;
+        j++;
+    }
+    multi->array[i] = '\0';
+    multi->count++;
+}
+
 char    *str_pos(t_multi_str *multi, size_t pos)
 {
     return (char *)(multi->array + (pos * multi->len_str));

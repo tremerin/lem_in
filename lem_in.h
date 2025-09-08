@@ -77,6 +77,7 @@ typedef struct s_data
 
 //parser
 void	    file_parser(t_data *data);
+void	    file_parser2(t_data *data);
 int		    is_int(char *str);
 int		    is_room(char *str);
 int		    is_link(char *str);
@@ -118,6 +119,7 @@ void        moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t 
 //multi string
 t_multi_str *init_multi_str(size_t size, size_t len);
 void        add_str(t_multi_str *multi, char *str);
+void        add_room_name(t_multi_str *multi, char *str);
 char        *str_pos(t_multi_str *multi, size_t pos);
 size_t      get_str_index(t_multi_str *multi, char *str);
 void        free_multi_str(t_multi_str *multi);

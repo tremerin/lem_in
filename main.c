@@ -63,7 +63,7 @@ int main(void)
     t_data data;
     init_data(&data);
     printf("init ok\n");
-    file_parser(&data);
+    file_parser2(&data);
     printf("parser ok\n");
     //print_table(data.t_adjacency);
     find_paths(&data);
