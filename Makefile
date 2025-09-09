@@ -1,10 +1,10 @@
 NAME		= lem_in
-SRC			= main.c\
-			parser.c\
-			table_2d.c\
-			multi_str.c\
-			pathfinder.c\
-			ants_movement.c\
+SRC			= srcs/main.c\
+			srcs/parser.c\
+			srcs/table_2d.c\
+			srcs/multi_str.c\
+			srcs/pathfinder.c\
+			srcs/ants_movement.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra
