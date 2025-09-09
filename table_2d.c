@@ -23,39 +23,25 @@ t_table *init_table(int rows, int columns, char value)
     return new;
 }
 
+
 void    set_value(t_table *table, int row, int colum, char value)
 {
     table->array[(table->columns * row) + colum] = value;
 }
+
 
 char    get_value(t_table *table, int row, int colum)
 {
     return (table->array[(table->columns * row) + colum]);
 }
 
-void    print_table(t_table *table)
-{
-    if (table == NULL || table->rows == 0|| table->columns == 0)
-    {
-        printf("No data\n");
-        return;
-    }
-    int i = 0;
-    int size = table->rows * table->columns;
-    while (i < size)
-    {
-        printf("%3d",table->array[i]);
-        i++;
-        if (i > 0 && i % table->columns == 0)
-            printf("\n");
-    }
-}
 
 void    free_table(t_table *table)
 {
     free(table->array);
     free(table);
 }
+
 
 t_table *copy_table(t_table *copy)
 {

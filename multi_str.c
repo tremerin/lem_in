@@ -1,5 +1,6 @@
 #include "lem_in.h"
 
+
 t_multi_str *init_multi_str(size_t size, size_t len)
 {
     t_multi_str *new = malloc(sizeof(t_multi_str));
@@ -22,6 +23,7 @@ t_multi_str *init_multi_str(size_t size, size_t len)
     return (new);
 }
 
+
 void    add_str(t_multi_str *multi, char *str)
 {
     size_t  i = multi->count * multi->len_str;
@@ -36,6 +38,7 @@ void    add_str(t_multi_str *multi, char *str)
     multi->array[i] = '\0';
     multi->count++;
 }
+
 
 void    add_room_name(t_multi_str *multi, char *str)
 {
@@ -52,10 +55,12 @@ void    add_room_name(t_multi_str *multi, char *str)
     multi->count++;
 }
 
+
 char    *str_pos(t_multi_str *multi, size_t pos)
 {
     return (char *)(multi->array + (pos * multi->len_str));
 }
+
 
 size_t   get_str_index(t_multi_str *multi, char *str)
 {
@@ -83,6 +88,7 @@ size_t   get_str_index(t_multi_str *multi, char *str)
     }
     return (i);
 }
+
 
 void    free_multi_str(t_multi_str *multi)
 {

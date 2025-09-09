@@ -10,7 +10,6 @@ void init_data(t_data *data)
         exit(EXIT_FAILURE);
     }
     data->t_adjacency = NULL;
-    data->t_weights = NULL;
 }
 
 void free_data(t_data *data)
@@ -37,8 +36,6 @@ void free_data(t_data *data)
     free_multi_str(data->names);
     if (data->t_adjacency != NULL)
         free_table(data->t_adjacency);    
-    if (data->t_weights != NULL)
-        free_table(data->t_weights);
     if (data->residual != NULL)
         free_table(data->residual);
 }
@@ -73,15 +70,14 @@ int main(void)
 {
     t_data data;
     init_data(&data);
-    printf("init ok\n");
     file_parser2(&data);
-    printf("parser ok\n");
     find_paths(&data);
-    order_paths(&data);
+    order_paths(data.paths.num_paths, data.paths.paths);
     size_t *lens = paths_len(&data);
     size_t lines = num_lines(data.ants, lens, data.paths.num_paths);
     if (data.table_size < 1500)
     {
+        order_paths(data.ff_paths.n_paths, data.ff_paths.paths);
         size_t *ff_lens = ff_paths_len(&data);
         size_t ff_lines = num_lines(data.ants, ff_lens, data.ff_paths.n_paths);
         if (lines < ff_lines)
@@ -95,13 +91,11 @@ int main(void)
             moving_ants(&data, ff_lens, data.ff_paths.n_paths, ff_lines);
         }
         free(ff_lens);
-        printf("lines suurballe: %li lines ff: %li\n", lines, ff_lines);
     }
     else
     {
         data.n_algo = 0;
         moving_ants(&data, lens, data.paths.num_paths, lines);
-        printf("lines suurballe: %li\n", lines);
     }
     free(lens);
     free_data(&data);

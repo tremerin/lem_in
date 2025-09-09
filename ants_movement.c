@@ -81,6 +81,7 @@ unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_pat
     return (assigned);
 }
 
+
 unsigned short  first_ant(size_t path, unsigned short *ants)
 {
     unsigned short first = 1;
@@ -94,29 +95,9 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
 }
 
 
-static void print_assigned_ants(t_data *data, unsigned short *assigned_ants)
-{
-    size_t i = 0;
-    size_t n = 0;
-    if (data->n_algo == 1)
-    {
-        n = data->ff_paths.n_paths;
-    }
-    else
-    {
-        n = data->paths.num_paths;
-    }
-    while (i < n)
-    {
-        printf("assigned ants[%ld]: %d\n", i, assigned_ants[i]);
-        i++;
-    }
-}
-
 void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines)
 {
     unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
-    print_assigned_ants(data, assigned_ants);
     size_t steps = 0;
     size_t path = 0;
     size_t ants = 0;

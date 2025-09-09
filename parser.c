@@ -49,6 +49,7 @@ int     is_room(char *str)
     return (1);
 }
 
+
 int     is_link(char *str)
 {
     size_t  i;
@@ -75,6 +76,7 @@ int     is_link(char *str)
     return (1);
 }
 
+
 char *get_name(char *room)
 {
     char    *name;
@@ -94,6 +96,7 @@ char *get_name(char *room)
     name[j] = 0;
     return (name);
 }
+
 
 void    read_link(t_data *data, char *link)
 {
@@ -123,6 +126,7 @@ void    read_link(t_data *data, char *link)
     free(node_one);
     free(node_two);
 }
+
 
 void    file_parser(t_data *data)
 {
@@ -233,6 +237,7 @@ void    file_parser(t_data *data)
         exit(EXIT_FAILURE);
     }
 }
+
 
 void    file_parser2(t_data *data)
 {
