@@ -190,7 +190,7 @@ void suurballe_tarjan(t_data *data, int max_paths)
             }
         }
     }
-    
+
     free(parent);
     free(distance);
 }
@@ -347,4 +347,9 @@ void find_paths(t_data *data)
         }
     }
     suurballe_tarjan(data, 15);
+    if (data->paths.num_paths == 0)
+    {
+        printf("No hay camino posible\n");
+        exit(EXIT_FAILURE);
+    }
 }
