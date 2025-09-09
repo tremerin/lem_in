@@ -77,7 +77,6 @@ typedef struct s_data
 
 //parser
 void	    file_parser(t_data *data);
-void	    file_parser2(t_data *data);
 int		    is_int(char *str);
 int		    is_room(char *str);
 int		    is_link(char *str);

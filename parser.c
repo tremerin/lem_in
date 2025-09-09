@@ -13,11 +13,10 @@ int     is_int(char *str)
 
 int     is_room(char *str)
 {
-    size_t  i;
-    size_t  space_one;
-    size_t  space_two;
+    size_t  i = 0;
+    size_t  space_one = 0;
+    size_t  space_two = 0;
 
-    i = space_one = space_two = 0;
     if (str[0] == 'L' || str[0] == '#' || str[0] == ' ')
         return (0);
     while (str[i] && str[i] != '\n')
@@ -37,7 +36,6 @@ int     is_room(char *str)
         return (0);
     char * num_one = ft_substr(str, space_one, (space_two - space_one) -1);
     char * num_two = ft_substr(str, space_two, (ft_strlen(str) - space_two) -1);
-    //printf("num1: %s,num2: %s\n", num_one, num_two);
     if (!is_int(num_one) || !is_int(num_two))
     {
         free(num_one);
@@ -51,21 +49,16 @@ int     is_room(char *str)
 
 int     is_link(char *str)
 {
-    size_t  i;
-    size_t  dash;
+    size_t  i = 0;
+    size_t  dash = 0;
 
-    if (is_room(str))
-        printf("%s is room\n", str);
-    i = 0;
-    dash = 0;
     if (str[i] == ' ' || str[i] == '-')
         return (0);
     while (str[i]) 
     {
-        if (str[i] == '-' && dash == 0)
+        if (str[i] == '-')
         {
             dash++;
-            //check room name
         }
         i++;
     }
@@ -114,10 +107,8 @@ void    read_link(t_data *data, char *link)
         }
         i++;
     }
-    //printf("one: %s$\ntwo: %s$\n", node_one, node_two);
     pos_name_one = get_str_index(data->names, node_one);
     pos_name_two = get_str_index(data->names, node_two);
-    //printf("one: %d, two: %d\n", pos_name_one, pos_name_two);
     set_value(data->t_adjacency, pos_name_one, pos_name_two, 1);
     set_value(data->t_adjacency, pos_name_two, pos_name_one, 1);
     free(node_one);
@@ -125,116 +116,6 @@ void    read_link(t_data *data, char *link)
 }
 
 void    file_parser(t_data *data)
-{
-    int     start = 0;
-    int     end = 0;
-    char    *name;
-    data->ants = 0;
-    size_t  i = 0;
-
-    char    *str = get_next_line(0);
-    while (str)
-    {
-        //ants
-        if (is_int(str))
-        {
-            if (data->ants == 0)
-            {
-                data->ants = ft_atoi(str);
-                printf("%s", str);
-                free(str);
-                str = get_next_line(0);
-                continue;
-            }
-            else
-                break ;
-        }
-        //void line
-        if (str[0] == '\n')
-            break ;
-        //check start
-        if (ft_strncmp(str, "##start\n", 9) == 0)
-        {
-            if (start == 0)
-                start++;
-            else if (start > 1)
-            {
-                perror("Error: more than one entry");
-                free(str);
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (start == 1 && is_room(str))
-        {
-            start++;
-            data->p_start = i;
-        }
-        //check end
-        if (ft_strncmp(str, "##end\n", 7) == 0)
-        {
-            if (end == 0)
-                end++;
-            else if (end > 1)
-            {
-                perror("Error: more than one exit");
-                free(str);
-                exit(EXIT_FAILURE);
-            }
-        }
-        else if (end == 1  && is_room(str))
-        {
-            //printf("str: %s", str);
-            end++;
-            data->p_end = i;
-        }
-        //check room
-        if (is_room(str))
-        {
-            name = get_name(str);
-            add_str(data->names, name);
-            free(name);
-            i++;
-        }
-        //check link
-        else if (is_link(str))
-        {
-            if (data->t_adjacency == NULL)
-            {
-                data->t_adjacency = init_table(i, i, 0);
-                data->table_size = i;
-            }
-            read_link(data, str);
-        }
-        else if (!ft_strncmp(str, "#", 1) == 0)// && !is_int(str))
-            break ;
-        printf("%s", str);
-        free(str);
-        str = get_next_line(0);
-    }
-    printf("\n");
-    if (start < 2)
-    {
-        perror("Error: no start");
-        if (data->names != NULL)
-            free_multi_str(data->names);
-        exit(EXIT_FAILURE);
-    }
-    if (end < 2)
-    {
-        perror("Error: no end");
-        if (data->names != NULL)
-            free_multi_str(data->names);
-        exit(EXIT_FAILURE);
-    }
-    if (data->t_adjacency == NULL)
-    {
-        perror("Error: insufficient data");
-        free_multi_str(data->names);
-        exit(EXIT_FAILURE);
-    }
-}
-
-void    file_parser2(t_data *data)
 {
     int     control = 0; //ants = 0, rooms = 1, links = 2
     int     start = 0;
@@ -318,6 +199,7 @@ void    file_parser2(t_data *data)
             }
             else if (!ft_strncmp(str, "#", 1) == 0)
             {
+                printf("here\n");
                 printf("%s", str);
                 free(str);
                 break ;

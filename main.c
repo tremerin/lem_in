@@ -74,7 +74,7 @@ int main(void)
     t_data data;
     init_data(&data);
     printf("init ok\n");
-    file_parser2(&data);
+    file_parser(&data);
     printf("parser ok\n");
     find_paths(&data);
     order_paths(&data);
