@@ -129,29 +129,32 @@ void order_paths(t_data *data)
         data->paths.paths[index] = temp;
         i++;
     }
-    i = 0;
-    j = 0;
-    size_t minor_ff;
-    t_path temp_ff;
-    index = 0;
-    while (i < data->ff_paths.n_paths)
+    if (data->table_size < 1500)
     {
-        j = i;
-        minor_ff = data->ff_paths.paths[i].len;
-        index = j;
-        while (j < data->ff_paths.n_paths)
+        i = 0;
+        j = 0;
+        size_t minor_ff;
+        t_path temp_ff;
+        index = 0;
+        while (i < data->ff_paths.n_paths)
         {
-            if (data->ff_paths.paths[j].len < minor_ff)
+            j = i;
+            minor_ff = data->ff_paths.paths[i].len;
+            index = j;
+            while (j < data->ff_paths.n_paths)
             {
-                minor_ff = data->ff_paths.paths[j].len;
-                index = j;
+                if (data->ff_paths.paths[j].len < minor_ff)
+                {
+                    minor_ff = data->ff_paths.paths[j].len;
+                    index = j;
+                }
+                j++;
             }
-            j++;
+            temp_ff = data->ff_paths.paths[i];
+            data->ff_paths.paths[i] = data->ff_paths.paths[index];
+            data->ff_paths.paths[index] = temp_ff;
+            i++;
         }
-        temp_ff = data->ff_paths.paths[i];
-        data->ff_paths.paths[i] = data->ff_paths.paths[index];
-        data->ff_paths.paths[index] = temp_ff;
-        i++;
     }
 }
 
@@ -529,17 +532,18 @@ void disjunt_paths(t_data *data, int max_flow)
 
 void find_paths(t_data *data)
 {
-    // if data->table_size > 1000: no ejecutar ff
-    int max_flow = ford_fulkerson(data);
-    if (max_flow)
+    if (data->table_size < 1500)
     {
-        disjunt_paths(data, max_flow);
-    }
-    else
-    {
-        //no encuentra camino
-        printf("No hay camino posible\n");
-        exit(EXIT_FAILURE);
+        int max_flow = ford_fulkerson(data);
+        if (max_flow)
+        {
+            disjunt_paths(data, max_flow);
+        }
+        else
+        {
+            printf("No hay camino posible\n");
+            exit(EXIT_FAILURE);
+        }
     }
     suurballe_tarjan(data, 15);
 }
