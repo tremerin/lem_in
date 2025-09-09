@@ -4,8 +4,6 @@ SRC			= main.c\
 			table_2d.c\
 			multi_str.c\
 			pathfinder.c\
-			node_distances.c\
-			group_paths.c\
 			ants_movement.c\
 
 CC			= gcc

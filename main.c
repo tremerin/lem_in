@@ -70,7 +70,7 @@ int main(void)
 {
     t_data data;
     init_data(&data);
-    file_parser2(&data);
+    file_parser(&data);
     find_paths(&data);
     order_paths(data.paths.num_paths, data.paths.paths);
     size_t *lens = paths_len(&data);
