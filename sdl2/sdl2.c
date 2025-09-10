@@ -1,5 +1,15 @@
+/*
+SDL2 basica             >> install libsdl2-dev          flag para compilar >> -lSDL2
+SDL2 modulo de texto    >> install libsdl2-ttf-dev      flag para compilar >> -lSDL2_ttf
+SDL2 imagnes png, jpg.. >> install libsdl2-image-dev    flag para compilar >> -lSDL2_image
+
+gcc sdl2.c -lSDL2 -lSDL2_image -lSDL2_ttf -o test_sdl2      >> compilar
+fc-list | grep -i sans                                      >> ver fuentes diponibles
+*/
+
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>   
+#include <SDL2/SDL_image.h> 
 #include <stdio.h>
 
 int main(int argc, char **argv)
@@ -7,14 +17,20 @@ int main(int argc, char **argv)
     // Inicializar SDL (video subsystem)
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
+        return (1);
     }
 
     // Inicializar SDL2_image solo con soporte PNG
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
         printf("IMG_Init Error: %s\n", IMG_GetError());
         SDL_Quit();
-        return 1;
+        return (1);
+    }
+
+    // Inicializa el módulo de fuentes
+    if (TTF_Init() == -1) {
+        printf("TTF_Init Error: %s\n", TTF_GetError());
+        return (1);
     }
 
     // Crear ventana
@@ -30,7 +46,7 @@ int main(int argc, char **argv)
     if (window == NULL) {
         printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
         SDL_Quit();
-        return 1;
+        return (1);
     }
 
     // Crear renderer
@@ -39,21 +55,35 @@ int main(int argc, char **argv)
         printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
         SDL_DestroyWindow(window);
         SDL_Quit();
-        return 1;
+        return (1);
     }
 
+    // Cargar fuente
+    TTF_Font *font = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 24);
+
+    if (!font) {
+        printf("Error loading font: %s\n", TTF_GetError());
+        return (1);
+    }
+
+    // Crear texto
+    SDL_Color white = {255, 255, 255, 255};
+    SDL_Surface *surface = TTF_RenderText_Blended(font, "Lem-in visualizer", white);
+    SDL_Texture *texture_text = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    
+    SDL_Rect text = {100, 100, 400, 100};
 
     // Cargar el PNG como textura
-    SDL_Surface *surface = IMG_Load("character.png");  // tu archivo PNG
+    surface = IMG_Load("character.png");  // tu archivo PNG
     if (!surface) {
         printf("IMG_Load Error: %s\n", IMG_GetError());
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         IMG_Quit();
         SDL_Quit();
-        return 1;
+        return (1);
     }
-
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);  // ya no necesitamos el surface
 
@@ -63,11 +93,11 @@ int main(int argc, char **argv)
         SDL_DestroyWindow(window);
         IMG_Quit();
         SDL_Quit();
-        return 1;
+        return (1);
     }
 
     
-    // Bucle de eventos (para que no se cierre inmediatamente)
+    // Bucle de eventos 
     int pos_x = 100;
     int pos_y = 100;
     int running = 1;
@@ -107,25 +137,19 @@ int main(int argc, char **argv)
         SDL_Rect character = { 100, 100, 300, 300 };
         SDL_RenderCopy(renderer, texture, NULL, &character);
 
+        // Dibujar texto
+        SDL_RenderCopy(renderer, texture_text, NULL, &text);
+
         // Mostrar en pantalla
         SDL_RenderPresent(renderer);
     }
 
     // Liberar recursos
     SDL_DestroyRenderer(renderer);
+    SDL_DestroyTexture(texture_text);
     SDL_DestroyTexture(texture);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }
-
-/*
-
-install libsdl2-dev
-install libsdl2-ttf-dev
-install libsdl2-image-dev
-
-gcc main.c -lSDL2
-gcc main.c -lSDL2 -lSDL2_image 
-
-*/
