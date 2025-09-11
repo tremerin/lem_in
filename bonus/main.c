@@ -1,5 +1,4 @@
-#include "../MLX42/MLX42.h"
-#include <stdio.h>
+#include "../include/visualizer.h"
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -49,12 +48,12 @@ void ft_hook(void* param)
 	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 		image->instances[0].x += 1;
 }
-
-// -----------------------------------------------------------------------------
-
-int32_t main(void)
+int main(void)
 {
-	mlx_t* mlx;
+    char *text = ft_strdup("libft ok\n");
+    printf("%s", text);
+    test_parser();
+    mlx_t* mlx;
 
 	// Gotta error check this stuff
 	if (!(mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true)))
@@ -80,5 +79,6 @@ int32_t main(void)
 
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
-	return (EXIT_SUCCESS);
+
+    return (0);
 }
