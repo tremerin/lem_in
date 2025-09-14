@@ -104,8 +104,8 @@ void    draw_room(t_data *data, char *str)
 
 void    draw_link(t_data *data, char *str)
 {
-    t_point start;
-    t_point end;
+    t_point start = {0, 0};
+    t_point end = {0, 0};
     char    *name_one;
     char    *name_two;
     size_t  i = 0;
@@ -136,6 +136,8 @@ void    draw_link(t_data *data, char *str)
         }
         i++;
     }
+    printf("one: %s %d %d\n", name_one, start.x, start.y);
+    printf("two: %s %d %d\n", name_two, end.x, end.y);
     draw_line(data->map, start, end, WHITE);
     draw_line(data->map, start, end, RED);
     free(name_one);

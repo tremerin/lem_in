@@ -21,8 +21,8 @@
 
 typedef struct s_point
 {
-    uint32_t    x;
-    uint32_t    y;
+    int    x;
+    int    y;
 }   t_point;
 
 typedef struct s_room

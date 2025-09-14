@@ -11,6 +11,7 @@ void	draw_line(mlx_image_t *image, t_point begin, t_point end, int color)
 	delta_x = end.x - begin.x;
 	delta_y = end.y - begin.y;
 	pixels = sqrt((delta_x * delta_x) + (delta_y * delta_y));
+    printf("pixels: %d\n", pixels);
 	delta_x = delta_x / pixels;
 	delta_y = delta_y / pixels;
 	pixel_x = begin.x;
