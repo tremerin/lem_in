@@ -10,6 +10,7 @@ SRC			= srcs/main.c\
 
 BONUS		= bonus/main.c\
 			bonus/parser.c\
+			bonus/shapes.c\
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra
