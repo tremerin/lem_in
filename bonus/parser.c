@@ -87,9 +87,6 @@ void    draw_room(t_data *data, char *str)
         i++;
     }
     data->rooms[data->n_rooms].name = ft_substr(str, 0, space_one -1);
-    printf("name: %s\n", data->rooms[data->n_rooms].name);
-    printf("x: %d\n", ft_atoi(str + space_one));
-    printf("y: %d\n", ft_atoi(str + space_two));
     data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * 100 + 50;
     data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * 100 + 50;
     center = data->rooms[data->n_rooms].point;
@@ -98,7 +95,7 @@ void    draw_room(t_data *data, char *str)
     draw_circle(data->map, center, 27, BLUE);
     draw_circle(data->map, center, 28, BLUE);
     draw_circle(data->map, center, 29, WHITE);
-
+    data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, center.x, center.y + 25);
     data->n_rooms++;
 }
 
@@ -114,9 +111,7 @@ void    draw_link(t_data *data, char *str)
         i++;
 
     name_one = ft_substr(str, 0, i);
-    printf("room 1: %s\n", name_one);
     name_two = ft_substr(str, i + 1, ft_strlen(str) -1);
-    printf("room 2: %s", name_two);
     size_t len_one = ft_strlen(name_one);
     size_t len_two = ft_strlen(name_two) -1;
     i = 0;
@@ -126,18 +121,14 @@ void    draw_link(t_data *data, char *str)
         {
             start.x = data->rooms[i].point.x;
             start.y = data->rooms[i].point.y;
-            printf("find one: %s\n", data->rooms[i].name);
         }
         if (ft_strncmp(data->rooms[i].name, name_two, len_two) == 0)
         {
             end.x = data->rooms[i].point.x;
             end.y = data->rooms[i].point.y;
-            printf("find two: %s\n", data->rooms[i].name);
         }
         i++;
     }
-    printf("one: %s %d %d\n", name_one, start.x, start.y);
-    printf("two: %s %d %d\n", name_two, end.x, end.y);
     draw_line(data->map, start, end, WHITE);
     draw_line(data->map, start, end, RED);
     free(name_one);

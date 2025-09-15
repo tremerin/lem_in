@@ -37,6 +37,7 @@ typedef struct s_data
     int         width; 
     mlx_t       *mlx;
     mlx_image_t *map;
+    mlx_image_t *names;
     t_room      *rooms;
     size_t      n_rooms;
     size_t      max_rooms;

@@ -19,7 +19,19 @@ t_data    *init_data(size_t width, size_t height)
         puts(mlx_strerror(mlx_errno));
         return (NULL);
     }
+    if (!(data->names = mlx_new_image(data->mlx, width, height)))
+    {
+        mlx_close_window(data->mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (NULL);
+    }
     if (mlx_image_to_window(data->mlx, data->map, 0, 0) == -1)
+    {
+        mlx_close_window(data->mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (NULL);
+    }
+    if (mlx_image_to_window(data->mlx, data->names, 0, 0) == -1)
     {
         mlx_close_window(data->mlx);
         puts(mlx_strerror(mlx_errno));
