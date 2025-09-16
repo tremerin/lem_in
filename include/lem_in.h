@@ -79,7 +79,6 @@ void            init_data(t_data *data);
 void            free_data(t_data *data);
 size_t          *paths_len(t_data *data);
 size_t          *ff_paths_len(t_data *data);
-void            print_paths(t_data *data, t_path *paths, size_t n_paths);
 void            flags(t_data *data, int argc, char **argv);
 
 //parser
@@ -107,6 +106,7 @@ void            find_paths(t_data *data);
 size_t          num_lines(unsigned short ants, size_t *paths_len, size_t n_paths);
 unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_paths);
 unsigned short  first_ant(size_t path, unsigned short *ants);
+void            print_paths(t_data *data, t_path *paths, size_t n_paths, unsigned short *assigned_ants);
 void            moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines);
 
 //multi string

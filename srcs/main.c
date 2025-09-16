@@ -68,22 +68,6 @@ size_t *ff_paths_len(t_data *data)
 }
 
 
-void print_paths(t_data *data, t_path *paths, size_t n_paths)
-{
-    size_t i = 0;
-    while (i < n_paths)
-    {
-        printf("PATH %li: ", i);
-        for (size_t j = 0; j < paths[i].len; j++)
-        {
-            printf("%s ", str_pos(data->names, paths[i].nodes[j]));
-        }
-        printf("\n");
-        i++;
-    }
-}
-
-
 void flags(t_data *data, int argc, char **argv)
 {
     int i = 1;
@@ -133,19 +117,11 @@ int main(int argc, char **argv)
         if (lines < ff_lines)
         {
             data.n_algo = 0;
-            if (data.flags.print_paths)
-            {
-                print_paths(&data, data.paths.paths, data.paths.num_paths);
-            }
             moving_ants(&data, lens, data.paths.num_paths, lines);
         }
         else
         {
             data.n_algo = 1;
-            if (data.flags.print_paths)
-            {
-                print_paths(&data, data.ff_paths.paths, data.ff_paths.n_paths);
-            }
             moving_ants(&data, ff_lens, data.ff_paths.n_paths, ff_lines);
         }
         free(ff_lens);
