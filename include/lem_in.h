@@ -79,6 +79,8 @@ void            init_data(t_data *data);
 void            free_data(t_data *data);
 size_t          *paths_len(t_data *data);
 size_t          *ff_paths_len(t_data *data);
+void            print_paths(t_data *data, t_path *paths, size_t n_paths);
+void            flags(t_data *data, int argc, char **argv);
 
 //parser
 int		        is_int(char *str);

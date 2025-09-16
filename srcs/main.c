@@ -102,7 +102,10 @@ void flags(t_data *data, int argc, char **argv)
         else if (ft_strncmp(argv[i], "-h", 2) == 0)
         {
             //print help
-            printf("help\n");
+            printf("Usage: %s [-p] [-m] < input_file\n", argv[0]);
+            printf("  -p    Show paths found\n");
+            printf("  -m    Don't print map\n");
+            exit(0);
         }
         i++;
     }
