@@ -6,6 +6,12 @@
 # include <limits.h> //INT_MAX
 # include <stdio.h>
 
+typedef struct s_flags
+{
+    int             print_paths; //-p flag
+    int             print_map; //-m flag
+}   t_flags;
+
 typedef struct s_queue
 {
     unsigned short *data;
@@ -65,6 +71,7 @@ typedef struct s_data
     t_path_set      paths;
     t_ff_path       ff_paths;
     unsigned short  n_algo;
+    t_flags         flags;
 }   t_data;
 
 //main
@@ -72,6 +79,7 @@ void            init_data(t_data *data);
 void            free_data(t_data *data);
 size_t          *paths_len(t_data *data);
 size_t          *ff_paths_len(t_data *data);
+void            flags(t_data *data, int argc, char **argv);
 
 //parser
 int		        is_int(char *str);
@@ -98,6 +106,7 @@ void            find_paths(t_data *data);
 size_t          num_lines(unsigned short ants, size_t *paths_len, size_t n_paths);
 unsigned short *assign_ants(unsigned short ants, size_t *paths_len, size_t n_paths);
 unsigned short  first_ant(size_t path, unsigned short *ants);
+void            print_paths(t_data *data, t_path *paths, size_t n_paths, unsigned short *assigned_ants);
 void            moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines);
 
 //multi string

@@ -95,9 +95,36 @@ unsigned short  first_ant(size_t path, unsigned short *ants)
 }
 
 
+void print_paths(t_data *data, t_path *paths, size_t n_paths, unsigned short *assigned_ants)
+{
+    size_t i = 0;
+    while (i < n_paths && assigned_ants[i] > 0)
+    {
+        printf("PATH %li: ", i);
+        for (size_t j = 0; j < paths[i].len; j++)
+        {
+            printf("%s ", str_pos(data->names, paths[i].nodes[j]));
+        }
+        printf("\n");
+        i++;
+    }
+}
+
+
 void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t lines)
 {
     unsigned short *assigned_ants = assign_ants(data->ants, paths_len, n_paths);
+    if (data->flags.print_paths)
+    {
+        if (data->n_algo == 0)
+        {
+            print_paths(data, data->paths.paths, n_paths, assigned_ants);
+        }
+        else
+        {
+            print_paths(data, data->ff_paths.paths, n_paths, assigned_ants);
+        }
+    }
     size_t steps = 0;
     size_t path = 0;
     size_t ants = 0;

@@ -10,6 +10,8 @@ void init_data(t_data *data)
         exit(EXIT_FAILURE);
     }
     data->t_adjacency = NULL;
+    data->flags.print_map = 0;
+    data->flags.print_paths = 0;
 }
 
 void free_data(t_data *data)
@@ -66,10 +68,44 @@ size_t *ff_paths_len(t_data *data)
 }
 
 
-int main(void)
+void flags(t_data *data, int argc, char **argv)
+{
+    int i = 1;
+    while (i < argc)
+    {
+        if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-m", 2) == 0)
+        {
+            data->flags.print_map = 1;
+        }
+        else if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-p", 2) == 0)
+        {
+            data->flags.print_paths = 1;
+        }
+        else if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-h", 2) == 0)
+        {
+            printf("Usage: %s [-p] [-m] < input_file\n", argv[0]);
+            printf("  -p    Show paths used\n");
+            printf("  -m    Don't print map\n");
+            exit(0);
+        }
+        else
+        {
+            printf("%s is invalid. Run -h to know how to run this program\n", argv[i]);
+            exit(0);
+        }
+        i++;
+    }
+}
+
+
+int main(int argc, char **argv)
 {
     t_data data;
     init_data(&data);
+    if (argc > 1)
+    {
+        flags(&data, argc, argv);
+    }
     file_parser(&data);
     find_paths(&data);
     order_paths(data.paths.num_paths, data.paths.paths);
