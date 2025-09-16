@@ -13,7 +13,7 @@ t_data    *init_data(size_t width, size_t height)
 		puts(mlx_strerror(mlx_errno));
 		return (NULL);
 	}
-    if (!(data->map = mlx_new_image(data->mlx, width, height)))
+    if (!(data->map_1 = mlx_new_image(data->mlx, width, height)))
     {
         mlx_close_window(data->mlx);
         puts(mlx_strerror(mlx_errno));
@@ -25,7 +25,7 @@ t_data    *init_data(size_t width, size_t height)
         puts(mlx_strerror(mlx_errno));
         return (NULL);
     }
-    if (mlx_image_to_window(data->mlx, data->map, 0, 0) == -1)
+    if (mlx_image_to_window(data->mlx, data->map_1, 0, 0) == -1)
     {
         mlx_close_window(data->mlx);
         puts(mlx_strerror(mlx_errno));
@@ -48,13 +48,13 @@ void free_data(t_data *data)
 
 int main(void)
 {
-    t_data *data = init_data(900, 900);
+    t_data *data = init_data(1900, 1200);
     if (data == NULL)
     {
         perror("Error: init fail");
         return (1);
     }
-    data->max_rooms = 10;
+    data->max_rooms = 120;
     data->n_rooms = 0;
     data->rooms = malloc(sizeof(t_room) * data->max_rooms);
     parser_and_draw(data);

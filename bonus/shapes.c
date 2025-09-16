@@ -11,7 +11,6 @@ void	draw_line(mlx_image_t *image, t_point begin, t_point end, int color)
 	delta_x = end.x - begin.x;
 	delta_y = end.y - begin.y;
 	pixels = sqrt((delta_x * delta_x) + (delta_y * delta_y));
-    printf("pixels: %d\n", pixels);
 	delta_x = delta_x / pixels;
 	delta_y = delta_y / pixels;
 	pixel_x = begin.x;
@@ -22,6 +21,25 @@ void	draw_line(mlx_image_t *image, t_point begin, t_point end, int color)
 		pixel_x += delta_x;
 		pixel_y += delta_y;
 		pixels--;
+	}
+}
+
+void	draw_line_width(mlx_image_t *image, t_point begin, t_point end, size_t width, int color)
+{
+	size_t i = 0;
+	t_point start_x = {(int)(begin.x - width/2), begin.y};
+	t_point start_y = {begin.x, (int)(begin.y - width/2)};
+	t_point end_x = {(int)(end.x -width/2), end.y}; 
+	t_point end_y = {end.x, (int)(end.y - width/2)}; 
+	while (i < width)
+	{
+		draw_line(image, start_x, end_x, color);
+		draw_line(image, start_y, end_y, color);
+		start_x.x ++;
+		end_x.x ++;
+		start_y.y ++;
+		end_y.y ++;
+		i++;
 	}
 }
 
@@ -41,6 +59,32 @@ void	draw_circle(mlx_image_t *image, t_point center, int radius, int color)
 		sine = sin(radians);
 		cosine = cos(radians);
 		mlx_put_pixel(image, center.x + cosine * radius, center.y + sine * radius, color);
+		angle += increment;
+	}
+}
+
+void	draw_fill_circle(mlx_image_t *image, t_point center, int radius, int color)
+{
+	float	angle;
+	float	radians;
+	float	sine;
+	float	cosine;
+	float	increment;
+	t_point begin;
+	t_point end;
+
+	angle = 90;
+	increment = 360 / (2 * 3.1415 * radius);
+	while (angle < 270)
+	{
+		radians = angle * (3.1415 / 180);
+		sine = sin(radians);
+		cosine = cos(radians);
+		begin.x = center.x + cosine * radius;
+		begin.y =  center.y + sine * radius;
+		end.x =  center.x - cosine * radius;
+		end.y =  center.y + sine * radius;
+		draw_line(image, begin, end, color);
 		angle += increment;
 	}
 }

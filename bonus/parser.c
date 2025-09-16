@@ -69,7 +69,7 @@ int     is_link(char *str)
     return (1);
 }
 
-void    draw_room(t_data *data, char *str)
+void    draw_room(t_data *data, char *str, int dist, int margin)
 {
     size_t  i = 0;
     size_t  space_one = 0;
@@ -87,14 +87,11 @@ void    draw_room(t_data *data, char *str)
         i++;
     }
     data->rooms[data->n_rooms].name = ft_substr(str, 0, space_one -1);
-    data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * 100 + 50;
-    data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * 100 + 50;
+    data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * dist + margin;
+    data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * dist + margin;
     center = data->rooms[data->n_rooms].point;
-    draw_circle(data->map, center, 25, WHITE);
-    draw_circle(data->map, center, 26, BLUE);
-    draw_circle(data->map, center, 27, BLUE);
-    draw_circle(data->map, center, 28, BLUE);
-    draw_circle(data->map, center, 29, WHITE);
+    draw_fill_circle(data->map_1, center, 29, BLUE);
+    draw_fill_circle(data->map_1, center, 26, WHITE);
     data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, center.x, center.y + 25);
     data->n_rooms++;
 }
@@ -129,8 +126,9 @@ void    draw_link(t_data *data, char *str)
         }
         i++;
     }
-    draw_line(data->map, start, end, WHITE);
-    draw_line(data->map, start, end, RED);
+    //draw_line(data->map, start, end, WHITE);
+    draw_line_width(data->map_1, start, end, 6, WHITE);
+    draw_line_width(data->map_1, start, end, 4, RED);
     free(name_one);
     free(name_two);
 }
@@ -140,18 +138,27 @@ void    parser_and_draw(t_data *data)
     char    *str = NULL;
 
     str = get_next_line(0);
+    data->ants = ft_atoi(str);
+    free(str);
+    str = get_next_line(0);
     while (str)
     {
         if (is_room(str))
         {
             printf("is room: %s", str);
-            draw_room(data, str);
+            draw_room(data, str, 100, 50);
         }
         else if (is_link(str))
         {
             printf("is link: %s", str);
             draw_link(data, str);
         }
+        else if (!ft_strncmp(str, "#", 1) == 0)
+        {
+            printf("%s", str);
+            free(str);
+            break ;
+        }  
         free(str);
         str = get_next_line(0);
     }

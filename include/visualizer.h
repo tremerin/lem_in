@@ -36,11 +36,13 @@ typedef struct s_data
     int         height;
     int         width; 
     mlx_t       *mlx;
-    mlx_image_t *map;
+    mlx_image_t *map_1;
+    mlx_image_t *map_2;
     mlx_image_t *names;
     t_room      *rooms;
     size_t      n_rooms;
     size_t      max_rooms;
+    size_t      ants;
 }   t_data;
 
 //parser
@@ -49,7 +51,9 @@ void    parser_and_draw(t_data *data);
 
 //shapes
 void	draw_line(mlx_image_t *image, t_point begin, t_point end, int color);
+void	draw_line_width(mlx_image_t *image, t_point begin, t_point end, size_t width, int color);
 void	draw_circle(mlx_image_t *image, t_point center, int radius, int color);
+void	draw_fill_circle(mlx_image_t *image, t_point center, int radius, int color);
 void	draw_poli(mlx_image_t *img, t_point *vertices, int vrt_num, int color);
 void	draw_cell(mlx_image_t *img, t_point init, int size, int color);
 
