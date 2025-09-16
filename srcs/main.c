@@ -73,22 +73,24 @@ void flags(t_data *data, int argc, char **argv)
     int i = 1;
     while (i < argc)
     {
-        if (ft_strncmp(argv[i], "-m", 2) == 0)
+        if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-m", 2) == 0)
         {
-            //don't print map
             data->flags.print_map = 1;
         }
-        else if (ft_strncmp(argv[i], "-p", 2) == 0)
+        else if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-p", 2) == 0)
         {
-            //print paths
             data->flags.print_paths = 1;
         }
-        else if (ft_strncmp(argv[i], "-h", 2) == 0)
+        else if (ft_strlen(argv[i]) == 2 && ft_strncmp(argv[i], "-h", 2) == 0)
         {
-            //print help
             printf("Usage: %s [-p] [-m] < input_file\n", argv[0]);
-            printf("  -p    Show paths found\n");
+            printf("  -p    Show paths used\n");
             printf("  -m    Don't print map\n");
+            exit(0);
+        }
+        else
+        {
+            printf("Flag %s is invalid. Run -h to know how to run this program\n", argv[i]);
             exit(0);
         }
         i++;
