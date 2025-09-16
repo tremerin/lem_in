@@ -90,7 +90,7 @@ void flags(t_data *data, int argc, char **argv)
         }
         else
         {
-            printf("Flag %s is invalid. Run -h to know how to run this program\n", argv[i]);
+            printf("%s is invalid. Run -h to know how to run this program\n", argv[i]);
             exit(0);
         }
         i++;
