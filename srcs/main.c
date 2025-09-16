@@ -10,6 +10,8 @@ void init_data(t_data *data)
         exit(EXIT_FAILURE);
     }
     data->t_adjacency = NULL;
+    data->flags.print_map = 0;
+    data->flags.print_paths = 0;
 }
 
 void free_data(t_data *data)
@@ -66,10 +68,55 @@ size_t *ff_paths_len(t_data *data)
 }
 
 
-int main(void)
+void print_paths(t_data *data, t_path *paths, size_t n_paths)
+{
+    size_t i = 0;
+    while (i < n_paths)
+    {
+        printf("PATH %li: ", i);
+        for (size_t j = 0; j < paths[i].len; j++)
+        {
+            printf("%s ", str_pos(data->names, paths[i].nodes[j]));
+        }
+        printf("\n");
+        i++;
+    }
+}
+
+
+void flags(t_data *data, int argc, char **argv)
+{
+    int i = 1;
+    while (i < argc)
+    {
+        if (ft_strncmp(argv[i], "-m", 2) == 0)
+        {
+            //don't print map
+            data->flags.print_map = 1;
+        }
+        else if (ft_strncmp(argv[i], "-p", 2) == 0)
+        {
+            //print paths
+            data->flags.print_paths = 1;
+        }
+        else if (ft_strncmp(argv[i], "-h", 2) == 0)
+        {
+            //print help
+            printf("help\n");
+        }
+        i++;
+    }
+}
+
+
+int main(int argc, char **argv)
 {
     t_data data;
     init_data(&data);
+    if (argc > 1)
+    {
+        flags(&data, argc, argv);
+    }
     file_parser(&data);
     find_paths(&data);
     order_paths(data.paths.num_paths, data.paths.paths);
@@ -83,11 +130,19 @@ int main(void)
         if (lines < ff_lines)
         {
             data.n_algo = 0;
+            if (data.flags.print_paths)
+            {
+                print_paths(&data, data.paths.paths, data.paths.num_paths);
+            }
             moving_ants(&data, lens, data.paths.num_paths, lines);
         }
         else
         {
             data.n_algo = 1;
+            if (data.flags.print_paths)
+            {
+                print_paths(&data, data.ff_paths.paths, data.ff_paths.n_paths);
+            }
             moving_ants(&data, ff_lens, data.ff_paths.n_paths, ff_lines);
         }
         free(ff_lens);

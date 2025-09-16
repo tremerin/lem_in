@@ -6,6 +6,12 @@
 # include <limits.h> //INT_MAX
 # include <stdio.h>
 
+typedef struct s_flags
+{
+    int             print_paths; //-p flag
+    int             print_map; //-m flag
+}   t_flags;
+
 typedef struct s_queue
 {
     unsigned short *data;
@@ -65,6 +71,7 @@ typedef struct s_data
     t_path_set      paths;
     t_ff_path       ff_paths;
     unsigned short  n_algo;
+    t_flags         flags;
 }   t_data;
 
 //main

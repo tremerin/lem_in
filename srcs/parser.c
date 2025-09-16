@@ -224,11 +224,17 @@ void    file_parser(t_data *data)
                     exit(EXIT_FAILURE);
             }  
         }
-        printf("%s", str);
+        if (!data->flags.print_map)
+        {
+            printf("%s", str);
+        }
         free(str);
         str = get_next_line(0);
     }
-    printf("\n");
+    if (!data->flags.print_map)
+    {
+        printf("\n");
+    }
     if (start < 2)
     {
         perror("Error: no start");
