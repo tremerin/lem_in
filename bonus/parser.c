@@ -90,9 +90,10 @@ void    draw_room(t_data *data, char *str, int dist, int margin)
     data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * dist + margin;
     data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * dist + margin;
     center = data->rooms[data->n_rooms].point;
-    draw_fill_circle(data->map_1, center, 29, BLUE);
-    draw_fill_circle(data->map_1, center, 26, WHITE);
-    data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, center.x, center.y + 25);
+    draw_fill_circle(data->map_1, center, 29, WHITE);
+    draw_fill_circle(data->map_2, center, 26, RED);
+    data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, 
+        center.x - ft_strlen(data->rooms[data->n_rooms].name) * 5, center.y - 10);
     data->n_rooms++;
 }
 
@@ -127,8 +128,8 @@ void    draw_link(t_data *data, char *str)
         i++;
     }
     //draw_line(data->map, start, end, WHITE);
-    draw_line_width(data->map_1, start, end, 6, WHITE);
-    draw_line_width(data->map_1, start, end, 4, RED);
+    draw_line_width(data->map_1, start, end, 12, WHITE);
+    draw_line_width(data->map_2, start, end, 8, RED);
     free(name_one);
     free(name_two);
 }
