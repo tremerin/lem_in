@@ -39,10 +39,16 @@ typedef struct s_data
     mlx_image_t *map_1;
     mlx_image_t *map_2;
     mlx_image_t *names;
+    mlx_image_t *ant;
+    mlx_image_t *ants_numbers;
     t_room      *rooms;
     size_t      n_rooms;
     size_t      max_rooms;
     size_t      ants;
+    size_t      cell_size;
+    size_t      margin;
+    size_t      p_start;
+    size_t      p_end;
 }   t_data;
 
 //parser

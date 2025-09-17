@@ -69,7 +69,7 @@ int     is_link(char *str)
     return (1);
 }
 
-void    draw_room(t_data *data, char *str, int dist, int margin)
+void    draw_room(t_data *data, char *str, int dist, int margin, int color)
 {
     size_t  i = 0;
     size_t  space_one = 0;
@@ -90,7 +90,8 @@ void    draw_room(t_data *data, char *str, int dist, int margin)
     data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * dist + margin;
     data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * dist + margin;
     center = data->rooms[data->n_rooms].point;
-    draw_fill_circle(data->map_1, center, 29, WHITE);
+    //draw_fill_circle(data->map_1, center, 31, BLACK);
+    draw_fill_circle(data->map_1, center, 29, color);
     draw_fill_circle(data->map_2, center, 26, RED);
     data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, 
         center.x - ft_strlen(data->rooms[data->n_rooms].name) * 5, center.y - 10);
@@ -128,18 +129,63 @@ void    draw_link(t_data *data, char *str)
         i++;
     }
     //draw_line(data->map, start, end, WHITE);
+    //draw_line_width(data->map_1, start, end, 14, BLACK);
     draw_line_width(data->map_1, start, end, 12, WHITE);
     draw_line_width(data->map_2, start, end, 8, RED);
     free(name_one);
     free(name_two);
 }
 
+void    create_ants(t_data *data)
+{
+    size_t  i = 0;
+    if (!(data->ant = mlx_new_image(data->mlx, 50, 50)))
+    {
+        mlx_close_window(data->mlx);
+        puts(mlx_strerror(mlx_errno));
+        return;
+    }
+    if (!(data->ants_numbers = mlx_new_image(data->mlx, data->width, data->height)))
+    {
+        mlx_close_window(data->mlx);
+        puts(mlx_strerror(mlx_errno));
+        return;
+    }
+    if (mlx_image_to_window(data->mlx, data->ants_numbers, i * 0, 0) == -1)
+    {
+        mlx_close_window(data->mlx);
+        puts(mlx_strerror(mlx_errno));
+        return;
+    }
+    t_point center = {25, 25};
+    draw_fill_circle(data->ant, center, 20, BLACK);
+    while (i < data->ants)
+    {
+        if (mlx_image_to_window(data->mlx, data->ant, i * 50, 0) == -1)
+        {
+            mlx_close_window(data->mlx);
+            puts(mlx_strerror(mlx_errno));
+            return;
+        }
+        char *num = ft_itoa(i + 1);
+        char *ant_name = ft_strjoin("L-", num);
+        data->ants_numbers = mlx_put_string(data->mlx, ant_name, i * 50, 50);
+        free(ant_name);
+        free(num);
+        i++;
+    }
+}
+
 void    parser_and_draw(t_data *data)
 {
     char    *str = NULL;
+    size_t  start = 0;
+    size_t  end = 0;
+    size_t  rooms = 0;
 
     str = get_next_line(0);
     data->ants = ft_atoi(str);
+    create_ants(data);
     free(str);
     str = get_next_line(0);
     while (str)
@@ -147,12 +193,34 @@ void    parser_and_draw(t_data *data)
         if (is_room(str))
         {
             printf("is room: %s", str);
-            draw_room(data, str, 100, 50);
+            if (start == 1)
+            {
+                draw_room(data, str, data->cell_size, data->margin, GREEN);
+                data->p_start = rooms;
+                start++;
+            }
+            else if (end == 1)
+            {
+                draw_room(data, str, data->cell_size, data->margin, BLUE);
+                data->p_end = rooms;
+                end++;                
+            }
+            else    
+                draw_room(data, str, data->cell_size, data->margin, WHITE);
+            rooms++;
         }
         else if (is_link(str))
         {
             printf("is link: %s", str);
             draw_link(data, str);
+        }
+        else if (ft_strncmp(str, "##start\n", 9) == 0)
+        {
+            start++;
+        }
+        else if (ft_strncmp(str, "##end\n", 7) == 0)
+        {
+            end++;
         }
         else if (!ft_strncmp(str, "#", 1) == 0)
         {
