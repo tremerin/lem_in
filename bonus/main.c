@@ -46,6 +46,21 @@ void free_data(t_data *data)
     free(data);
 }
 
+void reading_hook(void *param)
+{
+    t_data *data = param;
+    char *str;
+    if (data->reading == 1)
+    {
+        printf("reading hook: ");
+        str = get_next_line(0);
+        if (str == NULL)
+            data->reading = 0;
+        printf("%s", str);
+        free(str);
+    }
+}
+
 int main(void)
 {
     t_data *data = init_data(1900, 1200, 100, 50);
@@ -57,6 +72,7 @@ int main(void)
     data->max_rooms = 120;
     data->n_rooms = 0;
     data->rooms = malloc(sizeof(t_room) * data->max_rooms);
+    mlx_loop_hook(data->mlx, reading_hook, data);
     parser_and_draw(data);
 	mlx_loop(data->mlx);
     free(data);

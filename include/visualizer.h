@@ -49,6 +49,8 @@ typedef struct s_data
     size_t      margin;
     size_t      p_start;
     size_t      p_end;
+    char        *instrucction;
+    int         reading;
 }   t_data;
 
 //parser

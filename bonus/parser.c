@@ -11,6 +11,14 @@ int     is_int(char *str)
     return (1);
 }
 
+int     is_instrucction(char *str)
+{
+    if (str[0] == 'L')
+        return (1);
+    else
+        return (0);
+}
+
 int     is_room(char *str)
 {
     size_t  i = 0;
@@ -176,6 +184,11 @@ void    create_ants(t_data *data)
     }
 }
 
+/* void    move_ants(t_data *data, size_t ant, t_point final_pos)
+{
+    
+} */
+
 void    parser_and_draw(t_data *data)
 {
     char    *str = NULL;
@@ -183,6 +196,7 @@ void    parser_and_draw(t_data *data)
     size_t  end = 0;
     size_t  rooms = 0;
 
+    data->reading = 1;
     str = get_next_line(0);
     data->ants = ft_atoi(str);
     create_ants(data);
@@ -222,6 +236,12 @@ void    parser_and_draw(t_data *data)
         {
             end++;
         }
+        else if (is_instrucction(str))
+        {
+            data->instrucction = ft_strdup(str);
+            printf("parser, instrucction: %s", str);
+            break ;
+        }
         else if (!ft_strncmp(str, "#", 1) == 0)
         {
             printf("%s", str);
@@ -230,5 +250,9 @@ void    parser_and_draw(t_data *data)
         }  
         free(str);
         str = get_next_line(0);
+        if (str == NULL)
+            data->reading = 0;
     }
+    if (str != NULL)
+        free(str);
 }
