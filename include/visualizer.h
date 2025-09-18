@@ -31,26 +31,40 @@ typedef struct s_room
     t_point     point;
 }   t_room;
 
+typedef struct s_instructions
+{
+    /*
+    0: No instruction 
+    1: Waiting instruction -> start state
+    2: Executing instruction
+    3: End of instruction -> go to state 1
+    */
+    int     state; 
+    char    *instrucction;
+    size_t  n_ants;
+    int     *ants_moving;
+    t_point *destination; 
+}   t_instructions;
+
 typedef struct s_data
 {
-    int         height;
-    int         width; 
-    mlx_t       *mlx;
-    mlx_image_t *map_1;
-    mlx_image_t *map_2;
-    mlx_image_t *names;
-    mlx_image_t *ant;
-    mlx_image_t *ants_numbers;
-    t_room      *rooms;
-    size_t      n_rooms;
-    size_t      max_rooms;
-    size_t      ants;
-    size_t      cell_size;
-    size_t      margin;
-    size_t      p_start;
-    size_t      p_end;
-    char        *instrucction;
-    int         reading;
+    int             height;
+    int             width; 
+    mlx_t           *mlx;
+    mlx_image_t     *map_1;
+    mlx_image_t     *map_2;
+    mlx_image_t     *names;
+    mlx_image_t     *ant;
+    mlx_image_t     *ants_numbers;
+    t_room          *rooms;
+    size_t          n_rooms;
+    size_t          max_rooms;
+    size_t          ants;
+    size_t          cell_size;
+    size_t          margin;
+    size_t          p_start;
+    size_t          p_end;
+    t_instructions  *instructions;
 }   t_data;
 
 //parser

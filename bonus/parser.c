@@ -196,7 +196,6 @@ void    parser_and_draw(t_data *data)
     size_t  end = 0;
     size_t  rooms = 0;
 
-    data->reading = 1;
     str = get_next_line(0);
     data->ants = ft_atoi(str);
     create_ants(data);
@@ -238,7 +237,8 @@ void    parser_and_draw(t_data *data)
         }
         else if (is_instrucction(str))
         {
-            data->instrucction = ft_strdup(str);
+            data->instructions->instrucction = ft_strdup(str);
+            data->instructions->state = 2;
             printf("parser, instrucction: %s", str);
             break ;
         }
@@ -250,8 +250,6 @@ void    parser_and_draw(t_data *data)
         }  
         free(str);
         str = get_next_line(0);
-        if (str == NULL)
-            data->reading = 0;
     }
     if (str != NULL)
         free(str);
