@@ -222,8 +222,28 @@ void create_ants(t_data *data)
     {
         data->ants_data[i].actual_pos = malloc(sizeof(char) * ft_strlen(str_pos(data->names, data->p_start)));
         data->ants_data[i].actual_pos = str_pos(data->names, data->p_start);
-        printf("ant %i: %s\n", i, data->ants_data[i].actual_pos);
     }
+}
+
+
+void save_movements(t_data *data, char *str)
+{
+    int i = 1;
+    while (str[i] != '-')
+    {
+        i++;
+    }
+    char *num = ft_substr(str, 1, i);
+    int num_ant = ft_atoi(num);
+    int j = i + 1;
+    while (str[j] != ' ')
+    {
+        j++;
+    }
+    char *room = ft_substr(str, i + 1, j - i - 1);
+    int index = get_str_index(data->names, room);
+    (void)num_ant;
+    printf("index: %i\n", index);
 }
 
 
@@ -276,7 +296,7 @@ void parser(t_data *data)
                 create_ants(data);
                 move = 1;
             }
-            //movimientos
+            save_movements(data, str);
         }
         free(str);
         str = get_next_line(0);
