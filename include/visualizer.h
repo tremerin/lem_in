@@ -69,6 +69,7 @@ typedef struct s_data
 
 //parser
 void    parser_and_draw(t_data *data);
+void    parser_instruction(t_data *data);
 
 
 //shapes

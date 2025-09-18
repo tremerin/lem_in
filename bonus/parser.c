@@ -184,6 +184,52 @@ void    create_ants(t_data *data)
     }
 }
 
+void    parser_instruction(t_data *data)
+{
+    size_t spaces = 0;
+    size_t i = 0;
+    while (data->instructions->instrucction[i])
+    {
+        if (data->instructions->instrucction[i] == ' ')
+            spaces++;
+        i++;
+    }
+    data->instructions->n_ants = 1 + spaces;
+    data->instructions->ants_moving = malloc(sizeof(int) * data->instructions->n_ants);
+    i = 0;
+    char *str;
+    size_t pos_l = 0;
+    size_t pos_slash = 0;
+    size_t ants = 0;
+    int start = 0;
+    int end = 0;
+    while (data->instructions->instrucction[i])
+    {
+        if (data->instructions->instrucction[i] == 'L')
+        {
+            pos_l = i;
+            start = 1;
+        }
+        if (data->instructions->instrucction[i] == '-')
+        {
+            pos_slash = i;
+            end = 1;
+        }
+        if (start && end)
+        {
+            str = ft_substr(data->instructions->instrucction, pos_l + 1, (pos_slash - pos_l)-1);
+            //printf("substr: %s\n", str);
+            data->instructions->ants_moving[ants] = ft_atoi(str);
+            //printf("ant name: %d$\n", data->instructions->ants_moving[ants]);
+            ants++;
+            start = 0;
+            end = 0;
+            free(str);
+        }
+        i++;
+    }
+}
+
 /* void    move_ants(t_data *data, size_t ant, t_point final_pos)
 {
     
@@ -240,6 +286,7 @@ void    parser_and_draw(t_data *data)
             data->instructions->instrucction = ft_strdup(str);
             data->instructions->state = 2;
             printf("parser, instrucction: %s", str);
+            parser_instruction(data);
             break ;
         }
         else if (!ft_strncmp(str, "#", 1) == 0)
