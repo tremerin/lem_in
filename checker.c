@@ -226,24 +226,61 @@ void create_ants(t_data *data)
 }
 
 
+char    get_value(t_table *table, int row, int colum)
+{
+    return (table->array[(table->columns * row) + colum]);
+}
+
+
+size_t check_movement(t_data *data, int num_ant, int index)
+{
+    int start = get_str_index(data->names, data->ants_data[num_ant].actual_pos);
+    printf("start %i index %i\n", start, index);
+    if (get_value(data->t_adjacency, start, index))
+    {
+        return 1;
+    }
+    return 0;
+}
+
 void save_movements(t_data *data, char *str)
 {
-    int i = 1;
-    while (str[i] != '-')
+    int i = 0;
+    int init_num = 1;
+    int init_room = 0;
+    int k = 0;
+    int j = 0;
+    char *num;
+    char *room;
+    int num_ant = 0;
+    int index = INT_MAX;
+    printf("%s\n", str);
+    while (str[i])
     {
+        if (str[i] == '-')
+        {
+            k = i;
+            num = ft_substr(str, init_num, k - init_num);
+            num_ant = ft_atoi(num);
+            init_room = i + 1;
+        }
+        if (str[i] == ' ')
+        {
+            j = i;
+            room = ft_substr(str, init_room, j - k - 1);
+            init_num = j + 2;
+            index = get_str_index(data->names, room);
+            if (!check_movement(data, num_ant, index))
+            {
+                printf("Movement from room %s to room %s is wrong\n", data->ants_data[num_ant].actual_pos, room);
+                exit(EXIT_FAILURE);
+            }
+            free(data->ants_data[num_ant].actual_pos);
+            data->ants_data[num_ant].actual_pos = malloc(sizeof(char) * (ft_strlen(room) + 1));
+            data->ants_data[num_ant].actual_pos = room;
+        }
         i++;
     }
-    char *num = ft_substr(str, 1, i);
-    int num_ant = ft_atoi(num);
-    int j = i + 1;
-    while (str[j] != ' ')
-    {
-        j++;
-    }
-    char *room = ft_substr(str, i + 1, j - i - 1);
-    int index = get_str_index(data->names, room);
-    (void)num_ant;
-    printf("index: %i\n", index);
 }
 
 
@@ -269,17 +306,17 @@ void parser(t_data *data)
         else if (is_room(str))
         {
             add_room_name(data->names, str);
-            if (ft_strncmp(str, "##start\n", 9) == 0)
-            {
-                data->p_start = n_rooms;
-            }
-            else if (ft_strncmp(str, "##end\n", 6) == 0)
-            {
-                data->p_end = n_rooms;
-            }
             n_rooms++;
         }
-        else if (is_link(str))
+        else if (ft_strncmp(str, "##start\n", 9) == 0)
+        {
+            data->p_start = n_rooms;
+        }
+        else if (ft_strncmp(str, "##end\n", 6) == 0)
+        {
+            data->p_end = n_rooms;
+        }
+        else if (ft_strncmp(str, "L", 1) != 0 && is_link(str))
         {
             if (link == 0)
             {

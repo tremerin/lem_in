@@ -3,11 +3,11 @@
 
 #include "../Libft/libft.h"
 #include <stdio.h>
+#include <limits.h>
 
 typedef struct s_ants
 {
-    char    *actual_pos;
-    char    *next_pos;
+    char    *actual_pos; //room name
 }   t_ants;
 
 typedef struct s_multi_str
