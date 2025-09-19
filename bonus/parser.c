@@ -184,6 +184,19 @@ void    create_ants(t_data *data)
     }
 }
 
+size_t  room_index(t_data *data, char *room_name)
+{
+    size_t  i = 0;
+    size_t  len = ft_strlen(room_name);
+    while (i < data->n_rooms)
+    {
+        if (ft_strncmp(data->rooms[i].name, room_name, len) == 0)
+            return (i);
+        i++;
+    }
+    return (i);
+}
+
 void    parser_instruction(t_data *data)
 {
     size_t spaces = 0;
@@ -196,6 +209,7 @@ void    parser_instruction(t_data *data)
     }
     data->instructions->n_ants = 1 + spaces;
     data->instructions->ants_moving = malloc(sizeof(int) * data->instructions->n_ants);
+    data->instructions->destination = malloc(sizeof(t_point) * data->instructions->n_ants);
     i = 0;
     char *str;
     size_t pos_l = 0;
@@ -215,18 +229,30 @@ void    parser_instruction(t_data *data)
             pos_slash = i;
             end = 1;
         }
+        if ((data->instructions->instrucction[i] == ' ' || data->instructions->instrucction[i] == '\n') && end == 1)
+        {
+            str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
+            printf("room name: %s, pos: %ld\n", str, room_index(data, str));
+            data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
+            ants++;
+            end = 0;
+        }
         if (start && end)
         {
             str = ft_substr(data->instructions->instrucction, pos_l + 1, (pos_slash - pos_l)-1);
             //printf("substr: %s\n", str);
             data->instructions->ants_moving[ants] = ft_atoi(str);
             //printf("ant name: %d$\n", data->instructions->ants_moving[ants]);
-            ants++;
             start = 0;
-            end = 0;
             free(str);
         }
         i++;
+    }
+    if (end == 1)
+    {
+        str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
+        printf("room name: %s$\n", str);
+        data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
     }
 }
 

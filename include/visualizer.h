@@ -21,14 +21,14 @@
 
 typedef struct s_point
 {
-    int    x;
-    int    y;
+    int             x;
+    int             y;
 }   t_point;
 
 typedef struct s_room
 {
-    char        *name;
-    t_point     point;
+    char            *name;
+    t_point         point;
 }   t_room;
 
 typedef struct s_instructions
@@ -39,11 +39,11 @@ typedef struct s_instructions
     2: Executing instruction
     3: End of instruction -> go to state 1
     */
-    int     state; 
-    char    *instrucction;
-    size_t  n_ants;
-    int     *ants_moving;
-    t_point *destination; 
+    int             state; 
+    char            *instrucction;
+    size_t          n_ants;
+    int             *ants_moving;
+    t_point         *destination; 
 }   t_instructions;
 
 typedef struct s_data
