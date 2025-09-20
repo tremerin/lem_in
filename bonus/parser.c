@@ -147,7 +147,7 @@ void    draw_link(t_data *data, char *str)
 void    create_ants(t_data *data)
 {
     size_t  i = 0;
-    if (!(data->ant = mlx_new_image(data->mlx, 50, 50)))
+    if (!(data->ant = mlx_new_image(data->mlx, 100, 100)))
     {
         mlx_close_window(data->mlx);
         puts(mlx_strerror(mlx_errno));
@@ -159,17 +159,17 @@ void    create_ants(t_data *data)
         puts(mlx_strerror(mlx_errno));
         return;
     }
-    if (mlx_image_to_window(data->mlx, data->ants_numbers, i * 0, 0) == -1)
+    if (mlx_image_to_window(data->mlx, data->ants_numbers, 0, 0) == -1)
     {
         mlx_close_window(data->mlx);
         puts(mlx_strerror(mlx_errno));
         return;
     }
-    t_point center = {25, 25};
+    t_point center = {50, 50};
     draw_fill_circle(data->ant, center, 20, BLACK);
     while (i < data->ants)
     {
-        if (mlx_image_to_window(data->mlx, data->ant, i * 50, 0) == -1)
+        if (mlx_image_to_window(data->mlx, data->ant,  data->rooms[data->p_start].point.x - 50, data->rooms[data->p_start].point.y -50) == -1)
         {
             mlx_close_window(data->mlx);
             puts(mlx_strerror(mlx_errno));
@@ -184,83 +184,6 @@ void    create_ants(t_data *data)
     }
 }
 
-size_t  room_index(t_data *data, char *room_name)
-{
-    size_t  i = 0;
-    size_t  len = ft_strlen(room_name);
-    while (i < data->n_rooms)
-    {
-        if (ft_strncmp(data->rooms[i].name, room_name, len) == 0)
-            return (i);
-        i++;
-    }
-    return (i);
-}
-
-void    parser_instruction(t_data *data)
-{
-    size_t spaces = 0;
-    size_t i = 0;
-    while (data->instructions->instrucction[i])
-    {
-        if (data->instructions->instrucction[i] == ' ')
-            spaces++;
-        i++;
-    }
-    data->instructions->n_ants = 1 + spaces;
-    data->instructions->ants_moving = malloc(sizeof(int) * data->instructions->n_ants);
-    data->instructions->destination = malloc(sizeof(t_point) * data->instructions->n_ants);
-    i = 0;
-    char *str;
-    size_t pos_l = 0;
-    size_t pos_slash = 0;
-    size_t ants = 0;
-    int start = 0;
-    int end = 0;
-    while (data->instructions->instrucction[i])
-    {
-        if (data->instructions->instrucction[i] == 'L')
-        {
-            pos_l = i;
-            start = 1;
-        }
-        if (data->instructions->instrucction[i] == '-')
-        {
-            pos_slash = i;
-            end = 1;
-        }
-        if ((data->instructions->instrucction[i] == ' ' || data->instructions->instrucction[i] == '\n') && end == 1)
-        {
-            str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
-            printf("room name: %s, pos: %ld\n", str, room_index(data, str));
-            data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
-            ants++;
-            end = 0;
-        }
-        if (start && end)
-        {
-            str = ft_substr(data->instructions->instrucction, pos_l + 1, (pos_slash - pos_l)-1);
-            //printf("substr: %s\n", str);
-            data->instructions->ants_moving[ants] = ft_atoi(str);
-            //printf("ant name: %d$\n", data->instructions->ants_moving[ants]);
-            start = 0;
-            free(str);
-        }
-        i++;
-    }
-    if (end == 1)
-    {
-        str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
-        printf("room name: %s$\n", str);
-        data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
-    }
-}
-
-/* void    move_ants(t_data *data, size_t ant, t_point final_pos)
-{
-    
-} */
-
 void    parser_and_draw(t_data *data)
 {
     char    *str = NULL;
@@ -270,7 +193,6 @@ void    parser_and_draw(t_data *data)
 
     str = get_next_line(0);
     data->ants = ft_atoi(str);
-    create_ants(data);
     free(str);
     str = get_next_line(0);
     while (str)
@@ -282,6 +204,7 @@ void    parser_and_draw(t_data *data)
             {
                 draw_room(data, str, data->cell_size, data->margin, GREEN);
                 data->p_start = rooms;
+                create_ants(data);
                 start++;
             }
             else if (end == 1)
