@@ -175,11 +175,6 @@ void    create_ants(t_data *data)
             puts(mlx_strerror(mlx_errno));
             return;
         }
-        char *num = ft_itoa(i + 1);
-        char *ant_name = ft_strjoin("L-", num);
-        data->ants_numbers = mlx_put_string(data->mlx, ant_name, i * 50, 50);
-        free(ant_name);
-        free(num);
         i++;
     }
 }
@@ -204,7 +199,7 @@ void    parser_and_draw(t_data *data)
             {
                 draw_room(data, str, data->cell_size, data->margin, GREEN);
                 data->p_start = rooms;
-                create_ants(data);
+                //create_ants(data);
                 start++;
             }
             else if (end == 1)
@@ -234,6 +229,7 @@ void    parser_and_draw(t_data *data)
         {
             data->instructions->instrucction = ft_strdup(str);
             data->instructions->state = 2;
+            create_ants(data);
             printf("parser, instrucction: %s", str);
             parser_instruction(data);
             break ;

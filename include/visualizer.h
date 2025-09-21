@@ -49,7 +49,7 @@ typedef struct s_instructions
     float           *delta_x;
     float           *delta_y;
 }   t_instructions;
-
+ 
 typedef struct s_data
 {
     int             height;

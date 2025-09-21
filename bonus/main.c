@@ -80,6 +80,9 @@ void moving_hook(void *param)
     size_t end_move = 0;
     if (data->instructions->state == 2)
     {
+        //mlx_delete_image(data->mlx, data->ants_numbers);
+        //ft_bzero(data->ants_numbers->pixels, data->ants_numbers->width * data->ants_numbers->height * sizeof(int));
+        //ft_memset(data->ants_numbers->pixels, 0, data->ants_numbers->width * data->ants_numbers->height * sizeof(int));
         while (i < data->instructions->n_ants)
         {
             if (data->ant->instances[data->instructions->ants_moving[i] -1].x != data->instructions->destination[i].x - 50)
@@ -96,7 +99,14 @@ void moving_hook(void *param)
             }
             else
                 end_move ++;
+            /* char *num = ft_itoa(i + 1);
+            char *ant_name = ft_strjoin("L-", num);
+            data->ants_numbers = mlx_put_string(data->mlx, ant_name, data->ant->instances[data->instructions->ants_moving[i] - 1].x,
+                data->ant->instances[data->instructions->ants_moving[i] - 1].y);
+            free(ant_name);
+            free(num); */
             i++;
+            //printf("ants_number: %ld\n", data->ants_numbers->count);
         }
         if (end_move == data->instructions->n_ants * 2)
             data->instructions->state = 1;
