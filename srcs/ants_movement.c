@@ -128,6 +128,7 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t line
     size_t steps = 0;
     size_t path = 0;
     size_t ants = 0;
+    int space = 0;
     unsigned short ant_num = 0;
     while (steps < lines)
     {
@@ -140,25 +141,30 @@ void    moving_ants(t_data *data, size_t *paths_len, size_t n_paths, size_t line
             {
                 if ((int)steps - (int)ants < (int)paths_len[path] && (int)steps - (int)ants >= 0)
                 {
+                    if (space == 1)
+                        printf(" ");
                     if (data->n_algo == 1)
                     {
-                        printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
+                        printf("L%ld-%s", ant_num + ants, str_pos(data->names, 
                             data->ff_paths.paths[path].nodes[steps - ants]));
                             //data->paths[data->paths_index[path]].nodes[steps - ants]));
                     }
                     else
                     {
-                        printf("L%ld-%s ", ant_num + ants, str_pos(data->names, 
+                        printf("L%ld-%s", ant_num + ants, str_pos(data->names, 
                             data->paths.paths[path].nodes[steps - ants]));
                             //data->paths[data->paths_index[path]].nodes[steps - ants]));
                     }
+                    space = 1;
                 }
                 ants++;
+
             }
             path++;
         }
         printf("\n");
         steps++;
+        space = 0;
     }
     free(assigned_ants);
 }
