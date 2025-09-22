@@ -218,10 +218,11 @@ char    *str_pos(t_multi_str *multi, size_t pos)
 void create_ants(t_data *data)
 {
     data->ants_data = malloc(sizeof(t_ants) * data->ants);
+    char *room = str_pos(data->names, data->p_start);
     for (unsigned short i = 0; i < data->ants; i++)
     {
-        data->ants_data[i].actual_pos = malloc(sizeof(char) * ft_strlen(str_pos(data->names, data->p_start)));
-        data->ants_data[i].actual_pos = str_pos(data->names, data->p_start);
+        data->ants_data[i].actual_pos = malloc(sizeof(char) * (ft_strlen(str_pos(data->names, data->p_start)) + 1));
+        ft_strlcpy(data->ants_data[i].actual_pos, room, ft_strlen(room));
     }
 }
 
@@ -235,7 +236,8 @@ char    get_value(t_table *table, int row, int colum)
 size_t check_movement(t_data *data, int num_ant, int index)
 {
     int start = get_str_index(data->names, data->ants_data[num_ant].actual_pos);
-    printf("start %i index %i\n", start, index);
+    printf("num_ant %i start %i index %i\n", num_ant, start, index);
+    printf("value: %i\n", get_value(data->t_adjacency, start, index));
     if (get_value(data->t_adjacency, start, index))
     {
         return 1;
@@ -255,19 +257,32 @@ void save_movements(t_data *data, char *str)
     int num_ant = 0;
     int index = INT_MAX;
     printf("%s\n", str);
-    while (str[i])
+    while (str[i] != '\n')
     {
         if (str[i] == '-')
         {
             k = i;
             num = ft_substr(str, init_num, k - init_num);
-            num_ant = ft_atoi(num);
+            num_ant = ft_atoi(num) - 1;
+            free(num);
             init_room = i + 1;
         }
-        if (str[i] == ' ')
+        else if (str[i] == ' ' || str[i] == '\n' || str[i + 1] == '\0')
         {
             j = i;
-            room = ft_substr(str, init_room, j - k - 1);
+            // int room_len;
+            
+            // if (str[i + 1] == '\0' && str[i] != ' ' && str[i] != '\n')
+            // {
+            //     // Último movimiento: incluir el carácter actual
+            //     room_len = j - init_room + 1;
+            // }
+            // else
+            // {
+            //     // Movimiento con espacio: no incluir el espacio
+            //     room_len = j - init_room;
+            // }
+            room = ft_substr(str, init_room, j - init_room);
             init_num = j + 2;
             index = get_str_index(data->names, room);
             if (!check_movement(data, num_ant, index))
@@ -276,8 +291,10 @@ void save_movements(t_data *data, char *str)
                 exit(EXIT_FAILURE);
             }
             free(data->ants_data[num_ant].actual_pos);
-            data->ants_data[num_ant].actual_pos = malloc(sizeof(char) * (ft_strlen(room) + 1));
             data->ants_data[num_ant].actual_pos = room;
+
+            if (str[i] == '\n' || str[i + 1] == '\0')
+                break;
         }
         i++;
     }
@@ -303,18 +320,18 @@ void parser(t_data *data)
                 ants = 1;
             }
         }
-        else if (is_room(str))
-        {
-            add_room_name(data->names, str);
-            n_rooms++;
-        }
-        else if (ft_strncmp(str, "##start\n", 9) == 0)
+        if (ft_strncmp(str, "##start\n", 9) == 0)
         {
             data->p_start = n_rooms;
         }
-        else if (ft_strncmp(str, "##end\n", 6) == 0)
+        if (ft_strncmp(str, "##end\n", 6) == 0)
         {
             data->p_end = n_rooms;
+        }
+        if (is_room(str))
+        {
+            add_room_name(data->names, str);
+            n_rooms++;
         }
         else if (ft_strncmp(str, "L", 1) != 0 && is_link(str))
         {
@@ -341,10 +358,24 @@ void parser(t_data *data)
 }
 
 
+void free_data(t_data *data)
+{
+    for (int i = 0; i < data->ants; i++)
+    {
+        free(data->ants_data[i].actual_pos);
+    }
+    free(data->ants_data);
+    free(data->t_adjacency);
+    free(data->names->array);
+    free(data->names);
+}
+
+
 int main(void)
 {
     t_data data;
     init_data(&data);
     parser(&data);
+    free_data(&data);
     return 0;
 }
