@@ -124,20 +124,18 @@ void    draw_link(t_data *data, char *str)
     i = 0;
     while (i < data->n_rooms)
     {
-        if (ft_strncmp(data->rooms[i].name, name_one, len_one) == 0)
+        if (ft_strncmp(data->rooms[i].name, name_one, len_one) == 0 && ft_strlen(data->rooms[i].name) == len_one)
         {
             start.x = data->rooms[i].point.x;
             start.y = data->rooms[i].point.y;
         }
-        if (ft_strncmp(data->rooms[i].name, name_two, len_two) == 0)
+        if (ft_strncmp(data->rooms[i].name, name_two, len_two) == 0 && ft_strlen(data->rooms[i].name) == len_two)
         {
             end.x = data->rooms[i].point.x;
             end.y = data->rooms[i].point.y;
         }
         i++;
     }
-    //draw_line(data->map, start, end, WHITE);
-    //draw_line_width(data->map_1, start, end, 14, BLACK);
     draw_line_width(data->map_1, start, end, 12, WHITE);
     draw_line_width(data->map_2, start, end, 8, RED);
     free(name_one);
