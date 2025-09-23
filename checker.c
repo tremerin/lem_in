@@ -223,6 +223,7 @@ void create_ants(t_data *data)
     {
         data->ants_data[i].actual_pos = malloc(sizeof(char) * (ft_strlen(str_pos(data->names, data->p_start)) + 1));
         ft_strlcpy(data->ants_data[i].actual_pos, room, ft_strlen(room));
+        data->ants_data[i].end_pos = 0;
     }
 }
 
@@ -236,8 +237,6 @@ char    get_value(t_table *table, int row, int colum)
 size_t check_movement(t_data *data, int num_ant, int index)
 {
     int start = get_str_index(data->names, data->ants_data[num_ant].actual_pos);
-    printf("num_ant %i start %i index %i\n", num_ant, start, index);
-    printf("value: %i\n", get_value(data->t_adjacency, start, index));
     if (get_value(data->t_adjacency, start, index))
     {
         return 1;
@@ -256,7 +255,6 @@ void save_movements(t_data *data, char *str)
     char *room;
     int num_ant = 0;
     int index = INT_MAX;
-    printf("%s\n", str);
     while (str[i] != '\n')
     {
         if (str[i] == '-')
@@ -290,6 +288,10 @@ void save_movements(t_data *data, char *str)
                 printf("Movement from room %s to room %s is wrong\n", data->ants_data[num_ant].actual_pos, room);
                 exit(EXIT_FAILURE);
             }
+            if (index == data->p_end)
+            {
+                data->ants_data[num_ant].end_pos = 1;
+            }
             free(data->ants_data[num_ant].actual_pos);
             data->ants_data[num_ant].actual_pos = room;
 
@@ -298,6 +300,25 @@ void save_movements(t_data *data, char *str)
         }
         i++;
     }
+}
+
+
+void check_ants(t_data *data)
+{
+    char *start = str_pos(data->names, data->p_start);
+    for (unsigned short i = 0; i < data->ants; i++)
+    {
+        if (!ft_strncmp(data->ants_data[i].actual_pos, start, ft_strlen(start)))
+        {
+            printf("Ant number %i is still in start\n", i);
+        }
+        if (!data->ants_data[i].end_pos)
+        {
+            printf("Ant number %i didn't arrive to the end\n", i);
+        }
+    }
+    printf("All ants were moved\n");
+    printf("All ants arrived to the end\n");
 }
 
 
@@ -355,6 +376,8 @@ void parser(t_data *data)
         free(str);
         str = get_next_line(0);
     }
+    printf("Movements are correct\n");
+    check_ants(data);
 }
 
 

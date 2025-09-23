@@ -8,6 +8,7 @@
 typedef struct s_ants
 {
     char    *actual_pos; //room name
+    int     end_pos;
 }   t_ants;
 
 typedef struct s_multi_str
