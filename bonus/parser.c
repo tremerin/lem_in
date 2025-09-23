@@ -97,6 +97,10 @@ void    draw_room(t_data *data, char *str, int dist, int margin, int color)
     data->rooms[data->n_rooms].name = ft_substr(str, 0, space_one -1);
     data->rooms[data->n_rooms].point.x = ft_atoi(str + space_one) * dist + margin;
     data->rooms[data->n_rooms].point.y = ft_atoi(str + space_two) * dist + margin;
+    if (data->rooms[data->n_rooms].point.x > (int)data->max_x)
+        data->max_x = data->rooms[data->n_rooms].point.x;
+    if (data->rooms[data->n_rooms].point.y > (int)data->max_y)
+        data->max_y = data->rooms[data->n_rooms].point.y;
     center = data->rooms[data->n_rooms].point;
     //draw_fill_circle(data->map_1, center, 31, BLACK);
     draw_fill_circle(data->map_1, center, 29, color);
@@ -202,12 +206,12 @@ void    parser_and_draw(t_data *data)
             }
             else if (end == 1)
             {
-                draw_room(data, str, data->cell_size, data->margin, BLUE);
+                draw_room(data, str, data->cell_size, data->margin, GREEN);
                 data->p_end = rooms;
                 end++;                
             }
             else    
-                draw_room(data, str, data->cell_size, data->margin, WHITE);
+                draw_room(data, str, data->cell_size, data->margin, BROWN);
             rooms++;
         }
         else if (is_link(str))
@@ -229,6 +233,7 @@ void    parser_and_draw(t_data *data)
         }
         else if (is_instrucction(str))
         {
+            mlx_set_window_size(data->mlx, data->max_x + data->margin, data->max_y + data->margin);
             data->instructions->instrucction = ft_strdup(str);
             data->instructions->state = 2;
             create_ants(data);

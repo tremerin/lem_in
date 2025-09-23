@@ -47,6 +47,8 @@ t_data    *init_data(size_t width, size_t height, size_t cell_size, size_t margi
     data->max_rooms = 120;
     data->n_rooms = 0;
     data->rooms = malloc(sizeof(t_room) * data->max_rooms);
+    data->max_x = 0;
+    data->max_y = 0;
     return (data);
 }
 

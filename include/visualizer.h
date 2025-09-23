@@ -18,6 +18,16 @@
 # define PURPLE  0x800080FF
 # define WHITE   0xFFFFFFFF
 # define BLACK   0x000000FF
+# define BROWN   0x8B4513FF
+# define LIME    0xBFFF00FF
+# define PINK    0xFFC0CBFF
+# define TEAL    0x008080FF
+# define NAVY    0x000080FF
+# define OLIVE   0x808000FF
+# define MAROON  0x800000FF
+# define GOLD    0xFFD700FF
+# define SALMON  0xFA8072FF
+# define INDIGO  0x4B0082FF
 
 typedef struct s_point
 {
@@ -70,6 +80,8 @@ typedef struct s_data
     size_t          p_start;
     size_t          p_end;
     t_instructions  *instructions;
+    size_t          max_x;
+    size_t          max_y;
 }   t_data;
 
 //parser
