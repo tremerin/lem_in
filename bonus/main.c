@@ -43,6 +43,10 @@ t_data    *init_data(size_t width, size_t height, size_t cell_size, size_t margi
     data->instructions->instrucction = NULL;
     data->instructions->destination = NULL;
     data->instructions->state = 1;
+    data->instructions->speed = 5;
+    data->max_rooms = 120;
+    data->n_rooms = 0;
+    data->rooms = malloc(sizeof(t_room) * data->max_rooms);
     return (data);
 }
 
@@ -77,6 +81,7 @@ void moving_hook(void *param)
 {
     t_data *data = param;
     size_t i = 0;
+    size_t step = 0;
     size_t end_move = 0;
     if (data->instructions->state == 2)
     {
@@ -85,19 +90,29 @@ void moving_hook(void *param)
         //ft_memset(data->ants_numbers->pixels, 0, data->ants_numbers->width * data->ants_numbers->height * sizeof(int));
         while (i < data->instructions->n_ants)
         {
-            if (data->ant->instances[data->instructions->ants_moving[i] -1].x != data->instructions->destination[i].x - 50)
+        step = 0;
+            while (step < (size_t)data->instructions->speed)
             {
-                data->instructions->pixel_x[i] += data->instructions->delta_x[i];
-                data->ant->instances[data->instructions->ants_moving[i] - 1].x = (int)data->instructions->pixel_x[i];
+                if (data->ant->instances[data->instructions->ants_moving[i] -1].x != data->instructions->destination[i].x - 50)
+                {
+                    data->instructions->pixel_x[i] += (data->instructions->delta_x[i]);// * data->instructions->speed);
+                    data->ant->instances[data->instructions->ants_moving[i] - 1].x = (int)data->instructions->pixel_x[i];
+                }
+                if (data->ant->instances[data->instructions->ants_moving[i] -1].y != data->instructions->destination[i].y - 50)
+                {
+                    data->instructions->pixel_y[i] += (data->instructions->delta_y[i]); //* data->instructions->speed);
+                    data->ant->instances[data->instructions->ants_moving[i] - 1].y = (int)data->instructions->pixel_y[i];
+                }
+                step++;
             }
-            else
+            i++;
+        }
+        i = 0;
+        while (i < data->instructions->n_ants)
+        {
+            if (data->ant->instances[data->instructions->ants_moving[i] -1].x == data->instructions->destination[i].x - 50)
                 end_move ++;
-            if (data->ant->instances[data->instructions->ants_moving[i] -1].y != data->instructions->destination[i].y - 50)
-            {
-                data->instructions->pixel_y[i] += data->instructions->delta_y[i];
-                data->ant->instances[data->instructions->ants_moving[i] - 1].y = (int)data->instructions->pixel_y[i];
-            }
-            else
+            if (data->ant->instances[data->instructions->ants_moving[i] -1].y == data->instructions->destination[i].y - 50)
                 end_move ++;
             /* char *num = ft_itoa(i + 1);
             char *ant_name = ft_strjoin("L-", num);
@@ -121,9 +136,6 @@ int main(void)
         perror("Error: init fail");
         return (1);
     }
-    data->max_rooms = 120;
-    data->n_rooms = 0;
-    data->rooms = malloc(sizeof(t_room) * data->max_rooms);
     mlx_loop_hook(data->mlx, reading_hook, data);
     mlx_loop_hook(data->mlx, moving_hook, data);
     parser_and_draw(data);

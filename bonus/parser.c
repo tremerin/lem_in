@@ -223,6 +223,10 @@ void    parser_and_draw(t_data *data)
         {
             end++;
         }
+        else if (ft_strncmp(str, "##speed ", 8) == 0)
+        {
+            data->instructions->speed = ft_atoi(str + 8);
+        }
         else if (is_instrucction(str))
         {
             data->instructions->instrucction = ft_strdup(str);

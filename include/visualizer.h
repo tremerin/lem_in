@@ -48,6 +48,7 @@ typedef struct s_instructions
     float           *pixel_y; 
     float           *delta_x;
     float           *delta_y;
+    int             speed;
 }   t_instructions;
  
 typedef struct s_data
