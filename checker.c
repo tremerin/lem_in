@@ -222,7 +222,7 @@ void create_ants(t_data *data)
     for (unsigned short i = 0; i < data->ants; i++)
     {
         data->ants_data[i].actual_pos = malloc(sizeof(char) * (ft_strlen(str_pos(data->names, data->p_start)) + 1));
-        ft_strlcpy(data->ants_data[i].actual_pos, room, ft_strlen(room));
+        ft_strlcpy(data->ants_data[i].actual_pos, room, ft_strlen(room) + 1);
         data->ants_data[i].end_pos = 0;
     }
 }
@@ -244,60 +244,37 @@ size_t check_movement(t_data *data, int num_ant, int index)
     return 0;
 }
 
+
 void save_movements(t_data *data, char *str)
 {
+    char **str_token = ft_split(str, ' ');
     int i = 0;
-    int init_num = 1;
-    int init_room = 0;
-    int k = 0;
-    int j = 0;
-    char *num;
-    char *room;
-    int num_ant = 0;
     int index = INT_MAX;
-    while (str[i] != '\n')
+    int num_ant = 0;
+    while (str_token[i])
     {
-        if (str[i] == '-')
-        {
-            k = i;
-            num = ft_substr(str, init_num, k - init_num);
-            num_ant = ft_atoi(num) - 1;
-            free(num);
-            init_room = i + 1;
-        }
-        else if (str[i] == ' ' || str[i] == '\n' || str[i + 1] == '\0')
-        {
-            j = i;
-            // int room_len;
-            
-            // if (str[i + 1] == '\0' && str[i] != ' ' && str[i] != '\n')
-            // {
-            //     // Último movimiento: incluir el carácter actual
-            //     room_len = j - init_room + 1;
-            // }
-            // else
-            // {
-            //     // Movimiento con espacio: no incluir el espacio
-            //     room_len = j - init_room;
-            // }
-            room = ft_substr(str, init_room, j - init_room);
-            init_num = j + 2;
-            index = get_str_index(data->names, room);
-            if (!check_movement(data, num_ant, index))
-            {
-                printf("Movement from room %s to room %s is wrong\n", data->ants_data[num_ant].actual_pos, room);
-                exit(EXIT_FAILURE);
-            }
-            if (index == data->p_end)
-            {
-                data->ants_data[num_ant].end_pos = 1;
-            }
-            free(data->ants_data[num_ant].actual_pos);
-            data->ants_data[num_ant].actual_pos = room;
+        char *str_div = ft_strchr(str_token[i], '-');
+        char *num = ft_substr(str_token[i], 1, ft_strlen(str_token[i]) - ft_strlen(str_div) - 1);
+        num_ant = ft_atoi(num) - 1;
 
-            if (str[i] == '\n' || str[i + 1] == '\0')
-                break;
+        char *room = ft_substr(str_div, 1, ft_strlen(str_div) - 1);
+        int room_len = ft_strlen(room);
+        if (room_len > 0 && room[room_len - 1] == '\n') {
+            room[room_len - 1] = '\0';
         }
+        
+        index = get_str_index(data->names, room);
+        if (!check_movement(data, num_ant, index))
+        {
+            printf("Movement from room %s to room %s is wrong\n", data->ants_data[num_ant].actual_pos, room);
+            exit(EXIT_FAILURE);
+        }
+        if (index == data->p_end)
+        {
+            data->ants_data[num_ant].end_pos = 1;
+        }
+        free(data->ants_data[num_ant].actual_pos);
+        data->ants_data[num_ant].actual_pos = room;
         i++;
     }
 }
@@ -311,10 +288,12 @@ void check_ants(t_data *data)
         if (!ft_strncmp(data->ants_data[i].actual_pos, start, ft_strlen(start)))
         {
             printf("Ant number %i is still in start\n", i);
+            exit(EXIT_FAILURE);
         }
         if (!data->ants_data[i].end_pos)
         {
             printf("Ant number %i didn't arrive to the end\n", i);
+            exit(EXIT_FAILURE);
         }
     }
     printf("All ants were moved\n");
