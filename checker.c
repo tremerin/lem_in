@@ -245,6 +245,22 @@ size_t check_movement(t_data *data, int num_ant, int index)
 }
 
 
+void check_rooms(t_data *data)
+{
+    for (int i = 0; i < data->ants; i++)
+    {
+        char *room = data->ants_data[i].actual_pos;
+        for (int j = i + 1; j < data->ants; j++)
+        {
+            if (!ft_strncmp(room, data->ants_data[j].actual_pos, ft_strlen(room)) && (get_str_index(data->names, room) != data->p_start) && (get_str_index(data->names, room) != data->p_end))
+            {
+                printf("Ants %i and %i are in room %s at the same time\n", i + 1, j + 1, room);
+            }
+        }
+    }
+}
+
+
 void save_movements(t_data *data, char *str)
 {
     char **str_token = ft_split(str, ' ');
@@ -277,6 +293,7 @@ void save_movements(t_data *data, char *str)
         data->ants_data[num_ant].actual_pos = room;
         i++;
     }
+    check_rooms(data);
 }
 
 
