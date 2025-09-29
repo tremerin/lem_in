@@ -35,7 +35,6 @@ void    parser_instruction(t_data *data)
         i++;
     }
     data->instructions->n_ants = 1 + spaces;
-    printf("spaces: %ld\n", spaces); //to do: fix final space in moving ants function
     data->instructions->ants_moving = malloc(sizeof(int) * data->instructions->n_ants);
     data->instructions->destination = malloc(sizeof(t_point) * data->instructions->n_ants);
     data->instructions->pixel_x = malloc(sizeof(float) * data->instructions->n_ants);
@@ -64,7 +63,6 @@ void    parser_instruction(t_data *data)
         if ((data->instructions->instrucction[i] == ' ' || data->instructions->instrucction[i] == '\n') && end == 1)
         {
             str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
-            printf("room name: %s, pos: %ld\n", str, room_index(data, str));
             data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
             ants++;
             end = 0;
@@ -72,9 +70,7 @@ void    parser_instruction(t_data *data)
         if (start && end)
         {
             str = ft_substr(data->instructions->instrucction, pos_l + 1, (pos_slash - pos_l)-1);
-            //printf("substr: %s\n", str);
             data->instructions->ants_moving[ants] = ft_atoi(str);
-            //printf("ant name: %d$\n", data->instructions->ants_moving[ants]);
             start = 0;
             free(str);
         }
@@ -83,10 +79,8 @@ void    parser_instruction(t_data *data)
     if (end == 1)
     {
         str = ft_substr(data->instructions->instrucction, pos_slash + 1, (i - pos_slash)-1);
-        printf("room name: %s$\n", str);
         data->instructions->destination[ants] = data->rooms[room_index(data, str)].point;
     }
-    printf("instruction: %s$, ants: %ld\n", data->instructions->instrucction, data->instructions->n_ants);
     i = 0;
     while (i < data->instructions->n_ants)
     {

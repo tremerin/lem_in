@@ -82,6 +82,11 @@ typedef struct s_data
     t_instructions  *instructions;
     size_t          max_x;
     size_t          max_y;
+    int             color1;
+    int             color2;
+    int             color_start;
+    int             color_end;
+    int             color_background;
 }   t_data;
 
 //parser
@@ -89,6 +94,10 @@ void    parser_and_draw(t_data *data);
 
 //instruction
 void    parser_instruction(t_data *data);
+
+//hooks
+void reading_hook(void *param);
+void moving_hook(void *param);
 
 //shapes
 void	draw_line(mlx_image_t *image, t_point begin, t_point end, int color);

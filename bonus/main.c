@@ -1,7 +1,6 @@
 #include "../include/visualizer.h"
 
 
-
 t_data    *init_data(size_t width, size_t height, size_t cell_size, size_t margin)
 {
     t_data *data = malloc(sizeof(t_data));
@@ -49,6 +48,23 @@ t_data    *init_data(size_t width, size_t height, size_t cell_size, size_t margi
     data->rooms = malloc(sizeof(t_room) * data->max_rooms);
     data->max_x = 0;
     data->max_y = 0;
+    data->color1 = WHITE;
+    data->color2 = BROWN;
+    data->color_start = GREEN;
+    data->color_end = GREEN;
+    data->color_background = TEAL;
+    int i = 0;
+    int j = 0;
+    while (i < data->width)
+    {
+        j = 0;
+        while (j < data->height)
+        {
+            mlx_put_pixel(data->map_1, i, j,data->color_background);
+            j++;
+        }
+        i++;
+    }
     return (data);
 }
 
@@ -58,81 +74,11 @@ void free_data(t_data *data)
     free(data);
 }
 
-void reading_hook(void *param)
-{
-    t_data *data = param;
-    char *str;
-    if (data->instructions->state == 1)
-    {
-        printf("reading hook: ");
-        str = get_next_line(0);
-        if (str == NULL)
-            data->instructions->state = 0;
-        else 
-        {
-            data->instructions->instrucction = ft_strdup(str);
-            parser_instruction(data);
-            data->instructions->state = 2;
-        } 
-        printf("%s", str);
-        free(str);
-    }
-} 
 
-void moving_hook(void *param)
-{
-    t_data *data = param;
-    size_t i = 0;
-    size_t step = 0;
-    size_t end_move = 0;
-    if (data->instructions->state == 2)
-    {
-        //mlx_delete_image(data->mlx, data->ants_numbers);
-        //ft_bzero(data->ants_numbers->pixels, data->ants_numbers->width * data->ants_numbers->height * sizeof(int));
-        //ft_memset(data->ants_numbers->pixels, 0, data->ants_numbers->width * data->ants_numbers->height * sizeof(int));
-        while (i < data->instructions->n_ants)
-        {
-        step = 0;
-            while (step < (size_t)data->instructions->speed)
-            {
-                if (data->ant->instances[data->instructions->ants_moving[i] -1].x != data->instructions->destination[i].x - 50)
-                {
-                    data->instructions->pixel_x[i] += (data->instructions->delta_x[i]);// * data->instructions->speed);
-                    data->ant->instances[data->instructions->ants_moving[i] - 1].x = (int)data->instructions->pixel_x[i];
-                }
-                if (data->ant->instances[data->instructions->ants_moving[i] -1].y != data->instructions->destination[i].y - 50)
-                {
-                    data->instructions->pixel_y[i] += (data->instructions->delta_y[i]); //* data->instructions->speed);
-                    data->ant->instances[data->instructions->ants_moving[i] - 1].y = (int)data->instructions->pixel_y[i];
-                }
-                step++;
-            }
-            i++;
-        }
-        i = 0;
-        while (i < data->instructions->n_ants)
-        {
-            if (data->ant->instances[data->instructions->ants_moving[i] -1].x == data->instructions->destination[i].x - 50)
-                end_move ++;
-            if (data->ant->instances[data->instructions->ants_moving[i] -1].y == data->instructions->destination[i].y - 50)
-                end_move ++;
-            /* char *num = ft_itoa(i + 1);
-            char *ant_name = ft_strjoin("L-", num);
-            data->ants_numbers = mlx_put_string(data->mlx, ant_name, data->ant->instances[data->instructions->ants_moving[i] - 1].x,
-                data->ant->instances[data->instructions->ants_moving[i] - 1].y);
-            free(ant_name);
-            free(num); */
-            i++;
-            //printf("ants_number: %ld\n", data->ants_numbers->count);
-        }
-        if (end_move == data->instructions->n_ants * 2)
-            data->instructions->state = 1;
-    }
-}
 
 int main(void)
 {
-    t_data *data = init_data(1900, 1200, 100, 50);
+    t_data *data = init_data(1900, 1400, 100, 50);
     if (data == NULL)
     {
         perror("Error: init fail");

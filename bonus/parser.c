@@ -1,6 +1,6 @@
 #include "../include/visualizer.h"
 
-int     is_int(char *str)
+static int     is_int(char *str)
 {
     while (*str && *str != '\n')
     {
@@ -11,7 +11,7 @@ int     is_int(char *str)
     return (1);
 }
 
-int     is_instrucction(char *str)
+static int     is_instrucction(char *str)
 {
     if (str[0] == 'L')
         return (1);
@@ -19,7 +19,7 @@ int     is_instrucction(char *str)
         return (0);
 }
 
-int     is_room(char *str)
+static int     is_room(char *str)
 {
     size_t  i = 0;
     size_t  space_one = 0;
@@ -77,7 +77,7 @@ int     is_link(char *str)
     return (1);
 }
 
-void    draw_room(t_data *data, char *str, int dist, int margin, int color)
+static void    draw_room(t_data *data, char *str, int dist, int margin, int color)
 {
     size_t  i = 0;
     size_t  space_one = 0;
@@ -102,15 +102,14 @@ void    draw_room(t_data *data, char *str, int dist, int margin, int color)
     if (data->rooms[data->n_rooms].point.y > (int)data->max_y)
         data->max_y = data->rooms[data->n_rooms].point.y;
     center = data->rooms[data->n_rooms].point;
-    //draw_fill_circle(data->map_1, center, 31, BLACK);
     draw_fill_circle(data->map_1, center, 29, color);
-    draw_fill_circle(data->map_2, center, 26, RED);
+    draw_fill_circle(data->map_2, center, 26, data->color2);
     data->names = mlx_put_string(data->mlx, data->rooms[data->n_rooms].name, 
         center.x - ft_strlen(data->rooms[data->n_rooms].name) * 5, center.y - 10);
     data->n_rooms++;
 }
 
-void    draw_link(t_data *data, char *str)
+static void    draw_link(t_data *data, char *str)
 {
     t_point start = {0, 0};
     t_point end = {0, 0};
@@ -140,13 +139,13 @@ void    draw_link(t_data *data, char *str)
         }
         i++;
     }
-    draw_line_width(data->map_1, start, end, 12, WHITE);
-    draw_line_width(data->map_2, start, end, 8, RED);
+    draw_line_width(data->map_1, start, end, 12, data->color1);
+    draw_line_width(data->map_2, start, end, 8, data->color2);
     free(name_one);
     free(name_two);
 }
 
-void    create_ants(t_data *data)
+static void    create_ants(t_data *data)
 {
     size_t  i = 0;
     if (!(data->ant = mlx_new_image(data->mlx, 100, 100)))
@@ -181,6 +180,31 @@ void    create_ants(t_data *data)
     }
 }
 
+static void    draw_box_window(t_data *data)
+{
+    mlx_set_window_size(data->mlx, data->max_x + data->margin, data->max_y + data->margin);
+    t_point start;
+    t_point end;
+    start.x = 5;
+    start.y = 5;
+    end.x = data->max_x + data->margin -5;
+    end.y = 5;
+    draw_line_width(data->map_1, start, end, 5, WHITE);
+    draw_line_width(data->map_2, start, end, 3, RED);
+    start = end;
+    end.y = data->max_y + data->margin -5;
+    draw_line_width(data->map_1, start, end, 5, WHITE);
+    draw_line_width(data->map_2, start, end, 3, RED);
+    start = end;
+    end.x = 5;    
+    draw_line_width(data->map_1, start, end, 5, WHITE);
+    draw_line_width(data->map_2, start, end, 3, RED);
+    start = end;
+    end.y = 5;
+    draw_line_width(data->map_1, start, end, 5, WHITE);
+    draw_line_width(data->map_2, start, end, 3, RED);
+}
+
 void    parser_and_draw(t_data *data)
 {
     char    *str = NULL;
@@ -196,27 +220,24 @@ void    parser_and_draw(t_data *data)
     {
         if (is_room(str))
         {
-            printf("is room: %s", str);
             if (start == 1)
             {
-                draw_room(data, str, data->cell_size, data->margin, GREEN);
+                draw_room(data, str, data->cell_size, data->margin, data->color_start);
                 data->p_start = rooms;
-                //create_ants(data);
                 start++;
             }
             else if (end == 1)
             {
-                draw_room(data, str, data->cell_size, data->margin, GREEN);
+                draw_room(data, str, data->cell_size, data->margin, data->color_end);
                 data->p_end = rooms;
                 end++;                
             }
             else    
-                draw_room(data, str, data->cell_size, data->margin, BROWN);
+                draw_room(data, str, data->cell_size, data->margin, data->color1);
             rooms++;
         }
         else if (is_link(str))
         {
-            printf("is link: %s", str);
             draw_link(data, str);
         }
         else if (ft_strncmp(str, "##start\n", 9) == 0)
@@ -233,11 +254,10 @@ void    parser_and_draw(t_data *data)
         }
         else if (is_instrucction(str))
         {
-            mlx_set_window_size(data->mlx, data->max_x + data->margin, data->max_y + data->margin);
+            draw_box_window(data);
             data->instructions->instrucction = ft_strdup(str);
             data->instructions->state = 2;
             create_ants(data);
-            printf("parser, instrucction: %s", str);
             parser_instruction(data);
             break ;
         }

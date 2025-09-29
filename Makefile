@@ -13,6 +13,7 @@ BONUS		= bonus/main.c\
 			bonus/parser.c\
 			bonus/shapes.c\
 			bonus/instruction.c\
+			bonus/hooks.c\
 
 CHECKER		= checker.c
 
