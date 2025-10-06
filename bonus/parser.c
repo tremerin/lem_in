@@ -180,7 +180,7 @@ static void    create_ants(t_data *data)
     }
 }
 
-static void    draw_box_window(t_data *data)
+static void    draw_box_window(t_data *data, int color1, int color2)
 {
     mlx_set_window_size(data->mlx, data->max_x + data->margin, data->max_y + data->margin);
     t_point start;
@@ -189,20 +189,20 @@ static void    draw_box_window(t_data *data)
     start.y = 5;
     end.x = data->max_x + data->margin -5;
     end.y = 5;
-    draw_line_width(data->map_1, start, end, 5, WHITE);
-    draw_line_width(data->map_2, start, end, 3, RED);
+    draw_line_width(data->map_1, start, end, 5, color1);
+    draw_line_width(data->map_2, start, end, 3, color2);
     start = end;
     end.y = data->max_y + data->margin -5;
-    draw_line_width(data->map_1, start, end, 5, WHITE);
-    draw_line_width(data->map_2, start, end, 3, RED);
+    draw_line_width(data->map_1, start, end, 5, color1);
+    draw_line_width(data->map_2, start, end, 3, color2);
     start = end;
     end.x = 5;    
-    draw_line_width(data->map_1, start, end, 5, WHITE);
-    draw_line_width(data->map_2, start, end, 3, RED);
+    draw_line_width(data->map_1, start, end, 5, color1);
+    draw_line_width(data->map_2, start, end, 3, color2);
     start = end;
     end.y = 5;
-    draw_line_width(data->map_1, start, end, 5, WHITE);
-    draw_line_width(data->map_2, start, end, 3, RED);
+    draw_line_width(data->map_1, start, end, 5, color1);
+    draw_line_width(data->map_2, start, end, 3, color2);
 }
 
 void    parser_and_draw(t_data *data)
@@ -254,7 +254,7 @@ void    parser_and_draw(t_data *data)
         }
         else if (is_instrucction(str))
         {
-            draw_box_window(data);
+            draw_box_window(data, WHITE, RED);
             data->instructions->instrucction = ft_strdup(str);
             data->instructions->state = 2;
             create_ants(data);
