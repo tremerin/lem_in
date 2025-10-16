@@ -89,6 +89,8 @@ int bfs_shortest(t_data * data, t_table *residual, unsigned short *parent, unsig
             int residual_capacity = get_value(residual, u, v);
             if (visited[v] == 0 && residual_capacity != 0) //compruebo si han sido visitados y si residual es 0
             {
+                if (v != data->p_end && v != data->p_start && get_value(residual, v, v) == 0)
+                    continue;
                 queue_in(v, &queue); //lo meto en la cola
                 visited[v] = 1; //lo marco como visitado
                 parent[v] = u; //pongo el padre
@@ -188,6 +190,12 @@ void suurballe_tarjan(t_data *data, int max_paths)
             {
                 set_value(data->residual, u, v, current - 1);
             }
+            if (v != data->p_end && v != data->p_start)
+            {
+                char diagonal = get_value(data->residual, v, v);
+                if (diagonal > 0)
+                    set_value(data->residual, v, v, 0);
+            }
         }
     }
 
@@ -219,6 +227,8 @@ int bfs(t_data * data, t_table *residual, unsigned short *parent)
         {
             if (visited[v] == 0 && get_value(residual, u, v) > 0) //compruebo si han sido visitados y si tienen residual
             {
+                if (v != data->p_end && v != data->p_start && get_value(residual, v, v) == 0)
+                    continue;
                 queue_in(v, &queue); //lo meto en la cola
                 visited[v] = 1; //lo marco como visitado
                 parent[v] = u; //pongo el padre
@@ -278,6 +288,13 @@ int ford_fulkerson(t_data *data)
             
             char reverse_residual = get_value(data->ff_residual, v, u);
             set_value(data->ff_residual, v, u, reverse_residual + path_flow);
+
+            if (v != data->p_end && v != data->p_start)
+            {
+                char diagonal = get_value(data->ff_residual, v, v);
+                if (diagonal > 0)
+                    set_value(data->ff_residual, v, v, diagonal - path_flow);
+            }
         }
 
         max_flow += path_flow;

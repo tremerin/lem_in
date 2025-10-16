@@ -2,7 +2,7 @@
     #define LEM_IN_H
 
 # include "../Libft/libft.h"
-# include <stdio.h> //debug
+# include <stdio.h>
 # include <limits.h> //INT_MAX
 # include <stdio.h>
 
@@ -19,7 +19,7 @@ typedef struct s_queue
     int             capacity;
     int             front; //first element
     int             rear; //last element
-}   t_queue; //cola circular
+}   t_queue;
 
 typedef struct s_path
 {
@@ -87,7 +87,9 @@ int		        is_room(char *str);
 int		        is_link(char *str);
 char            *get_name(char *room);
 void            read_link(t_data *data, char *link);
+void            fill_diagonal(t_data *data);
 void	        file_parser(t_data *data);
+void print_table(t_table *table, t_data *data);
 
 //pathfinder
 void            order_paths(unsigned short num_paths, t_path *paths);

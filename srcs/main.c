@@ -111,11 +111,13 @@ int main(int argc, char **argv)
     order_paths(data.paths.num_paths, data.paths.paths);
     size_t *lens = paths_len(&data);
     size_t lines = num_lines(data.ants, lens, data.paths.num_paths);
+    //printf("lines: %li\n", lines);
     if (data.table_size < 1500)
     {
         order_paths(data.ff_paths.n_paths, data.ff_paths.paths);
         size_t *ff_lens = ff_paths_len(&data);
         size_t ff_lines = num_lines(data.ants, ff_lens, data.ff_paths.n_paths);
+        //printf("ff lines: %li\n", ff_lines);
         if (lines < ff_lines)
         {
             data.n_algo = 0;
