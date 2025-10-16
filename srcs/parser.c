@@ -119,6 +119,57 @@ void    read_link(t_data *data, char *link)
 }
 
 
+void fill_diagonal(t_data *data)
+{
+    unsigned int i = 0;
+    while (i < data->t_adjacency->rows)
+    {
+        if (i != data->p_start && i != data->p_end)
+            set_value(data->t_adjacency, i, i, 1);
+        i++;
+    }
+}
+
+
+void print_table(t_table *table, t_data *data)
+{
+    if (!table || !table->array)
+    {
+        printf("Error: tabla nula\n");
+        return;
+    }
+    
+    // Imprimir índices de columnas
+    for (unsigned int col = 0; col < table->columns; col++)
+    {
+        printf("%3s", str_pos(data->names, col));
+    }
+    printf("\n");
+    
+    // Línea separadora
+    printf("   ");
+    for (unsigned int col = 0; col < table->columns; col++)
+    {
+        printf("---");
+    }
+    printf("\n");
+    
+    // Imprimir filas
+    for (unsigned int row = 0; row < table->rows; row++)
+    {
+        printf("%2d |", row);  // Índice de fila
+        
+        for (unsigned int col = 0; col < table->columns; col++)
+        {
+            int index = row * table->columns + col;
+            printf("%3d", table->array[index]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+
 void    file_parser(t_data *data)
 {
     int     control = 0; //ants = 0, rooms = 1, links = 2
@@ -183,6 +234,7 @@ void    file_parser(t_data *data)
             else if (is_link(str))
             {
                 data->t_adjacency = init_table(rooms, rooms, 0);
+                fill_diagonal(data);
                 data->table_size = rooms;
                 control = 2;
                 read_link(data, str);
@@ -203,7 +255,6 @@ void    file_parser(t_data *data)
             }
             else if (!ft_strncmp(str, "#", 1) == 0)
             {
-                printf("here\n");
                 printf("%s", str);
                 free(str);
                 break ;
