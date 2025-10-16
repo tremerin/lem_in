@@ -1,4 +1,4 @@
-#include "include/checker.h"
+#include "../include/checker.h"
 
 
 t_multi_str *init_multi_str(size_t size, size_t len)

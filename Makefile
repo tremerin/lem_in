@@ -15,7 +15,7 @@ BONUS		= bonus/main.c\
 			bonus/instruction.c\
 			bonus/hooks.c\
 
-CHECKER		= checker.c
+CHECKER		= bonus/checker.c
 
 CC			= gcc
 CFLAGS		= -Wall -Werror -Wextra
@@ -47,10 +47,10 @@ checker: ${OBJS_C}
 
 clean :
 	make -C $(LIBFT_PATH) clean
-	$(RM) $(OBJS) $(OBJS_B)
+	$(RM) $(OBJS) $(OBJS_B) $(OBJS_C)
 
 fclean :
 	make -C $(LIBFT_PATH) fclean
-	$(RM) $(OBJS) $(OBJS_B) $(NAME) $(NAME_B)
+	$(RM) $(OBJS) $(OBJS_B) $(NAME) $(NAME_B) $(NAME_C)
 
 re : fclean all
